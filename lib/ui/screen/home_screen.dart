@@ -1,5 +1,6 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:todoer/navigation/path/app_path.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
@@ -23,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _counter = 0;
 
   void _incrementCounter() {
-    context.beamToNamed('/screen_1');
+    context.beamToNamed(AppPath.SECOND);
   }
 
   @override

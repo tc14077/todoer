@@ -2,8 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
-
-import 'ui/screen/home_screen.dart';
+import 'package:todoer/navigation/location/beam_locations.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,13 +12,11 @@ class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
   final routerDelegate = BeamerDelegate(
-    locationBuilder: RoutesLocationBuilder(
-      routes: {
-        // Return either Widgets or BeamPages if more customization is needed
-        '/': (context, state, data) => const HomeScreen(title: 'HomeScreen'),
-        '/screen_1': (context, state, data) =>
-            const HomeScreen(title: 'screen_1'),
-      },
+    locationBuilder: BeamerLocationBuilder(
+      beamLocations: [
+        HomeLocation(),
+        SecondLocation(),
+      ],
     ),
   );
 

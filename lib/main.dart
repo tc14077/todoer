@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
-import 'package:todoer/navigation/beamer_key.dart';
 import 'package:todoer/navigation/location/beam_locations.dart';
 
 void main() {
@@ -30,7 +29,6 @@ class _MyAppState extends State<MyApp> {
   final GlobalKey key = GlobalKey();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _beamerListener = () {
       final currentBeamLocation = ((key.currentState?.widget as MaterialApp)

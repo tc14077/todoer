@@ -3,28 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:todoer/navigation/location/beam_locations.dart';
 import 'package:todoer/navigation/path/app_path.dart';
 
-class MainScreen extends StatelessWidget {
-  MainScreen({Key? key}) : super(key: key);
+import '../../navigation/beamer/main_beamer.dart';
 
-  final _beamerKey = GlobalKey<BeamerState>();
-  final _routerDelegate = BeamerDelegate(
-    locationBuilder: BeamerLocationBuilder(
-      beamLocations: [
-        HomeLocation(),
-        SettingsLocation(),
-      ],
-    ),
-  );
+class MainScreen extends StatelessWidget {
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Beamer(
-        key: _beamerKey,
-        routerDelegate: _routerDelegate,
+        key: BeamerMain.beamerKey,
+        routerDelegate: BeamerMain.routerDelegate,
+        backButtonDispatcher: BeamerMain.backButtonDispatcher,
       ),
       bottomNavigationBar: BottomNavigationBarWidget(
-        beamerKey: _beamerKey,
+        beamerKey: BeamerMain.beamerKey,
       ),
     );
   }

@@ -2,23 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
-import 'package:todoer/navigation/location/beam_locations.dart';
-import 'package:todoer/navigation/location/main_location.dart';
+import 'package:todoer/navigation/beamer/main_router.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  final routerDelegate = BeamerDelegate(
-    locationBuilder: BeamerLocationBuilder(
-      beamLocations: [
-        MainLocation(),
-      ],
-    ),
-  );
-
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -40,12 +31,12 @@ class _MyAppState extends State<MyApp> {
       // TODO use logger
       // print('uriBlueprint: $currentUri');
     };
-    widget.routerDelegate.addListener(_beamerListener);
+    BeamerMainRouter.routerDelegate.addListener(_beamerListener);
   }
 
   @override
   void dispose() {
-    widget.routerDelegate.removeListener(_beamerListener);
+    BeamerMainRouter.routerDelegate.removeListener(_beamerListener);
     super.dispose();
   }
 
@@ -60,7 +51,8 @@ class _MyAppState extends State<MyApp> {
           return p0;
         },
       ),
-      routerDelegate: widget.routerDelegate,
+      routerDelegate: BeamerMainRouter.routerDelegate,
+      backButtonDispatcher: BeamerMainRouter.backButtonDispatcher,
     );
   }
 }

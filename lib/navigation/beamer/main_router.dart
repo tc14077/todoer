@@ -12,6 +12,10 @@ class BeamerMainRouter {
       ],
     ),
   );
+
+  //TODO find out how to pass the control to child
   static final BeamerBackButtonDispatcher backButtonDispatcher =
-      BeamerBackButtonDispatcher(delegate: routerDelegate);
+      BeamerBackButtonDispatcher(
+    delegate: routerDelegate,
+  );
 }

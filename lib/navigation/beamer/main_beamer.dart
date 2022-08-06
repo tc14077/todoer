@@ -20,7 +20,10 @@ class BeamerMain {
     parent: BeamerMainRouter.backButtonDispatcher,
     delegate: routerDelegate,
     onBack: (delegate) async {
-      print('BeamerMain onBack');
+      if (delegate.currentBeamLocation is HomeLocation ||
+          delegate.currentBeamLocation is SettingsLocation) {
+        return true;
+      }
       return false;
     },
   );

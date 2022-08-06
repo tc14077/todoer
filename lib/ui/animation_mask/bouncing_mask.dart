@@ -11,7 +11,7 @@ class BouncingMask extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() {
+  State<BouncingMask> createState() {
     return _BouncingMaskState();
   }
 }
@@ -36,5 +36,11 @@ class _BouncingMaskState extends State<BouncingMask>
       child: widget.child,
       position: _offsetAnimation,
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

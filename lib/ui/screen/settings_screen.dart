@@ -21,8 +21,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Center(
         child: Text(widget.title),
       ),
-      floatingActionButton: IconButton(
-        icon: const Icon(Icons.dark_mode),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.dark_mode),
+        tooltip: 'change_theme',
         onPressed: () {
           context.read<AppThemeCubit>().toggleTheme();
         },

@@ -25,7 +25,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late final _beamerListener;
+  late final Function() _beamerListener;
   final GlobalKey key = GlobalKey();
   @override
   void initState() {
@@ -37,7 +37,8 @@ class _MyAppState extends State<MyApp> {
       final beamState = currentBeamLocation.state;
       String currentUri = "";
       currentUri = (beamState as BeamState).uriBlueprint.path;
-      print('uriBlueprint: $currentUri');
+      // TODO use logger
+      // print('uriBlueprint: $currentUri');
     };
     widget.routerDelegate.addListener(_beamerListener);
   }

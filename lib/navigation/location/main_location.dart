@@ -5,7 +5,7 @@ import 'package:todoer/ui/screen/main_screen.dart';
 
 class MainLocation extends BeamLocation<BeamState> {
   @override
-  List<Pattern> get pathPatterns => ['${AppPath.MAIN}/*'];
+  List<Pattern> get pathPatterns => ['${AppPath.main}/*'];
 
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {

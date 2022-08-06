@@ -6,7 +6,7 @@ import '../../ui/screen/settings_screen.dart';
 
 class SettingsLocation extends BeamLocation<BeamState> {
   @override
-  List<Pattern> get pathPatterns => ['${AppPath.SECOND}/*'];
+  List<Pattern> get pathPatterns => ['${AppPath.settings}/*'];
 
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {

@@ -70,11 +70,11 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
       ],
       onTap: (index) {
         if (index == 0) {
-          _beamerDelegate.beamToNamed(AppPath.HOME);
+          _beamerDelegate.beamToNamed(AppPath.home);
           return;
         }
         if (index == 1) {
-          _beamerDelegate.beamToNamed(AppPath.SECOND);
+          _beamerDelegate.beamToNamed(AppPath.settings);
           return;
         }
       },

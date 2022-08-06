@@ -6,7 +6,7 @@ import '../../ui/screen/home_screen.dart';
 
 class HomeLocation extends BeamLocation<BeamState> {
   @override
-  List<Pattern> get pathPatterns => ['${AppPath.HOME}/*'];
+  List<Pattern> get pathPatterns => ['${AppPath.home}/*'];
 
   @override
   List<BeamPage> buildPages(BuildContext context, BeamState state) {

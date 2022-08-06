@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import 'package:todoer/navigation/location/beam_locations.dart';
+import 'package:todoer/navigation/location/main_location.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,8 +13,7 @@ class MyApp extends StatefulWidget {
   final routerDelegate = BeamerDelegate(
     locationBuilder: BeamerLocationBuilder(
       beamLocations: [
-        HomeLocation(),
-        SecondLocation(),
+        MainLocation(),
       ],
     ),
   );

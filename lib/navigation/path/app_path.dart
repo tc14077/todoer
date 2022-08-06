@@ -1,6 +1,5 @@
 class AppPath {
-  static const HOME = '/home';
-  static const SECOND = '/second';
-  static const THIRD = '/third';
-  static const FOURTH = '/fourth';
+  static const MAIN = '/main';
+  static const HOME = '$MAIN/home';
+  static const SECOND = '$MAIN/second';
 }

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import 'package:todoer/navigation/beamer/main_router.dart';
+import 'package:todoer/ui/system/themes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,6 +52,8 @@ class _MyAppState extends State<MyApp> {
           return p0;
         },
       ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       routerDelegate: BeamerMainRouter.routerDelegate,
       backButtonDispatcher: BeamerMainRouter.backButtonDispatcher,
     );

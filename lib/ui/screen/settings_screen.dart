@@ -19,7 +19,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Text(widget.title),
+        child: Text(
+          widget.title,
+          style: Theme.of(context).textTheme.headline2,
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.dark_mode),

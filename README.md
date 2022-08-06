@@ -11,5 +11,7 @@ In this project, developers are recommended developers to following conventions:
     - https://semver.org/
 - *Gitflow Workflow*
     - https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
+- *flutter_lints*
+    - https://pub.dev/packages/flutter_lints
 
 Happy Coding!🤞🤞🤞

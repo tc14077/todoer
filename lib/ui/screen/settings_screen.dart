@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todoer/bloc/app_theme/app_theme_cubit.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key, required this.title}) : super(key: key);
@@ -18,6 +20,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: Center(
         child: Text(widget.title),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.dark_mode),
+        tooltip: 'change_theme',
+        onPressed: () {
+          context.read<AppThemeCubit>().toggleTheme();
+        },
       ),
     );
   }

@@ -2,7 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todoer/bloc/app_theme/app_theme_cubit.dart';
+import 'package:todoer/enum/app_theme_options.dart';
 import 'package:todoer/navigation/beamer/main_router.dart';
+import 'package:todoer/ui/system/themes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,16 +47,30 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      key: key,
-      routeInformationParser: BeamerParser(
-        onParse: (p0) {
-          log('BeamerParser: ${p0.location}');
-          return p0;
+    return BlocProvider(
+      create: (context) => AppThemeCubit(),
+      child: Builder(
+        builder: (context) {
+          return BlocBuilder<AppThemeCubit, AppThemeOptions>(
+            builder: (context, state) {
+              return MaterialApp.router(
+                key: key,
+                routeInformationParser: BeamerParser(
+                  onParse: (p0) {
+                    log('BeamerParser: ${p0.location}');
+                    return p0;
+                  },
+                ),
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: state.themeMode,
+                routerDelegate: BeamerMainRouter.routerDelegate,
+                backButtonDispatcher: BeamerMainRouter.backButtonDispatcher,
+              );
+            },
+          );
         },
       ),
-      routerDelegate: BeamerMainRouter.routerDelegate,
-      backButtonDispatcher: BeamerMainRouter.backButtonDispatcher,
     );
   }
 }

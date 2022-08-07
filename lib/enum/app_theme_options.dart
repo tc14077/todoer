@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:todoer/ui/system/themes.dart';
 
-enum AppThemeOptions {
+enum AppThemeOption {
   light(themeMode: ThemeMode.light),
   dark(themeMode: ThemeMode.dark),
   system(themeMode: ThemeMode.system),
   custom(themeMode: null);
 
   final ThemeMode? themeMode;
-  const AppThemeOptions({this.themeMode});
+  const AppThemeOption({this.themeMode});
 
   ThemeData? get themeData {
     switch (this) {
-      case AppThemeOptions.light:
+      case AppThemeOption.light:
         return AppTheme.lightTheme;
-      case AppThemeOptions.dark:
+      case AppThemeOption.dark:
         return AppTheme.darkTheme;
-      case AppThemeOptions.system:
-      case AppThemeOptions.custom:
+      case AppThemeOption.system:
+      case AppThemeOption.custom:
         return null;
     }
   }

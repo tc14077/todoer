@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
       create: (context) => AppThemeCubit(),
       child: Builder(
         builder: (context) {
-          return BlocBuilder<AppThemeCubit, AppThemeOptions>(
+          return BlocBuilder<AppThemeCubit, AppThemeOption>(
             builder: (context, state) {
               return MaterialApp.router(
                 key: key,

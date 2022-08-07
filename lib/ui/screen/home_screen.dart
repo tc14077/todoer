@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoer/ui/system/themed_text.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
@@ -16,9 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Text(
+        child: HeadlineMediumText(
           widget.title,
-          style: Theme.of(context).textTheme.headline2,
         ),
       ),
     );

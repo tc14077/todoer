@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todoer/ui/animation_mask/icon_appearance_mask.dart';
 import '../../bloc/app_theme/app_theme_cubit.dart';
 import '../../enum/app_theme_options.dart';
 import '../system/themed_text.dart';
@@ -14,11 +15,6 @@ class ThemeSettingScreen extends StatefulWidget {
 class _ThemeSettingScreenState extends State<ThemeSettingScreen> {
   @override
   Widget build(BuildContext context) {
-    final themeOptions = AppThemeOption.values
-        .map((e) => ThemeCard(
-              appThemeOption: e,
-            ))
-        .toList();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Theme setting'),
@@ -29,7 +25,11 @@ class _ThemeSettingScreenState extends State<ThemeSettingScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const TitleLargeText('Themes'),
-            ...themeOptions,
+            BlocBuilder<AppThemeCubit, AppThemeOption>(
+              builder: (context, state) {
+                return ThemeOptionsWidget(currentTheme: state);
+              },
+            ),
           ],
         ),
       ),
@@ -37,11 +37,34 @@ class _ThemeSettingScreenState extends State<ThemeSettingScreen> {
   }
 }
 
+class ThemeOptionsWidget extends StatelessWidget {
+  final AppThemeOption currentTheme;
+  const ThemeOptionsWidget({
+    Key? key,
+    required this.currentTheme,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final themeOptions = AppThemeOption.values
+        .map((e) => ThemeCard(
+              appThemeOption: e,
+              isSelected: currentTheme == e,
+            ))
+        .toList();
+    return Column(
+      children: themeOptions,
+    );
+  }
+}
+
 class ThemeCard extends StatelessWidget {
   final AppThemeOption appThemeOption;
+  final bool isSelected;
   const ThemeCard({
     Key? key,
     required this.appThemeOption,
+    required this.isSelected,
   }) : super(key: key);
 
   @override
@@ -57,6 +80,7 @@ class ThemeCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               BodyLargeText(appThemeOption.displayName),
+              if (isSelected) const IconAppearanceMask(icon: Icon(Icons.check))
             ],
           ),
         ),

@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import '../../navigation/path/app_path.dart';
 
 class AnimatedBottomNavigationBar extends StatefulWidget {
+  final bool needShowing;
   const AnimatedBottomNavigationBar({
     Key? key,
     required int currentIndex,
     required BeamerDelegate beamerDelegate,
+    required this.needShowing,
   })  : _currentIndex = currentIndex,
         _beamerDelegate = beamerDelegate,
         super(key: key);
@@ -24,28 +26,33 @@ class _AnimatedBottomNavigationBarState
     extends State<AnimatedBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: widget._currentIndex,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: 'Settings',
-        )
-      ],
-      onTap: (index) {
-        if (index == 0) {
-          widget._beamerDelegate.beamToNamed(AppPath.home);
-          return;
-        }
-        if (index == 1) {
-          widget._beamerDelegate.beamToNamed(AppPath.settings);
-          return;
-        }
-      },
+    final double dy = widget.needShowing ? 0 : 1;
+    return AnimatedSlide(
+      offset: Offset(0, dy),
+      duration: const Duration(milliseconds: 500),
+      child: BottomNavigationBar(
+        currentIndex: widget._currentIndex,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          )
+        ],
+        onTap: (index) {
+          if (index == 0) {
+            widget._beamerDelegate.beamToNamed(AppPath.home);
+            return;
+          }
+          if (index == 1) {
+            widget._beamerDelegate.beamToNamed(AppPath.settings);
+            return;
+          }
+        },
+      ),
     );
   }
 }

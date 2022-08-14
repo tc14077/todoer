@@ -43,6 +43,7 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
     final routerDelegate = widget.beamerKey.currentState!.routerDelegate;
     final beamState = routerDelegate.currentBeamLocation.state as BeamState;
     context.read<BottomNavBarCubit>().appPathUpdate(beamState.uri.toString());
+    setState(() {});
   }
 
   @override
@@ -57,11 +58,11 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
     _currentIndex = _beamerDelegate.currentBeamLocation is HomeLocation ? 0 : 1;
     return BlocBuilder<BottomNavBarCubit, bool>(
       builder: (context, state) {
-        if (state) {
-          return AnimatedBottomNavigationBar(
-              currentIndex: _currentIndex, beamerDelegate: _beamerDelegate);
-        }
-        return const SizedBox.shrink();
+        return AnimatedBottomNavigationBar(
+          currentIndex: _currentIndex,
+          beamerDelegate: _beamerDelegate,
+          needShowing: state,
+        );
       },
     );
   }

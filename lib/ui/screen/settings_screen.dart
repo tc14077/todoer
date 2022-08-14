@@ -46,13 +46,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.dark_mode),
-        tooltip: 'change_theme',
-        onPressed: () {
-          context.read<AppThemeCubit>().toggleTheme();
-        },
-      ),
     );
   }
 }

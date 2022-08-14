@@ -11,6 +11,8 @@ import 'package:todoer/ui/system/themes.dart';
 import 'bloc/bottom_nav_bar/cubit/bottom_nav_bar_cubit.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 

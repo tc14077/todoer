@@ -8,6 +8,8 @@ import 'package:todoer/enum/app_theme_options.dart';
 import 'package:todoer/navigation/beamer/main_router.dart';
 import 'package:todoer/ui/system/themes.dart';
 
+import 'bloc/bottom_nav_bar/cubit/bottom_nav_bar_cubit.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -47,8 +49,15 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AppThemeCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AppThemeCubit(),
+        ),
+        BlocProvider<BottomNavBarCubit>(
+          create: (context) => BottomNavBarCubit(),
+        ),
+      ],
       child: Builder(
         builder: (context) {
           return BlocBuilder<AppThemeCubit, AppThemeOption>(

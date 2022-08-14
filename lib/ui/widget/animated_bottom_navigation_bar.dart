@@ -29,7 +29,7 @@ class _AnimatedBottomNavigationBarState
     final double dy = widget.needShowing ? 0 : 1;
     return AnimatedSlide(
       offset: Offset(0, dy),
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 70),
       child: BottomNavigationBar(
         currentIndex: widget._currentIndex,
         items: const [

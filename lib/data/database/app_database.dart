@@ -19,7 +19,7 @@ class AppDatabase extends _$AppDatabase {
   // you should bump this number whenever you change or add a table definition.
   // Migrations are covered later in the documentation.
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   // see more details on
   // https://drift.simonbinder.eu/docs/advanced-features/migrations/
@@ -29,7 +29,11 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (Migrator m) async {
         await m.createAll();
       },
-      onUpgrade: (Migrator m, int from, int to) async {},
+      onUpgrade: (Migrator m, int from, int to) async {
+        if (from < 2) {
+          await m.addColumn(users, users.name);
+        }
+      },
     );
   }
 }

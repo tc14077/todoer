@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoer/bloc/app_theme/app_theme_cubit.dart';
 import 'package:todoer/navigation/beamer/main_beamer.dart';
 
-import '../../enum/general_setting_items.dart';
+import '../../enum/general_setting_item.dart';
 import '../system/themed_text.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -18,12 +18,12 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    final settingItems = GeneralSettingItems.values
+    final settingItems = GeneralSettingItem.values
         .map((item) => ListTile(
-              leading: item.model.icon,
-              title: BodyMediumText(item.model.displayName),
+              leading: item.buildIcon(),
+              title: BodyMediumText(item.displayName),
               onTap: () => BeamerMain.beamerKey.currentState?.routerDelegate
-                  .beamToNamed(item.model.appPath),
+                  .beamToNamed(item.appPath),
             ))
         .toList();
     return Scaffold(

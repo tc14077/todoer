@@ -5,11 +5,13 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:todoer/data/models/user_settings.dart';
-import 'package:todoer/enum/app_theme_options.dart';
+import 'package:todoer/data/models/users.dart';
+
+import '../../enum/app_theme_options.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [UserSettings])
+@DriftDatabase(tables: [UserSettings, Users])
 class AppDatabase extends _$AppDatabase {
   // we tell the database where to store the data with this constructor
   AppDatabase() : super(_openConnection());

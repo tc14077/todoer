@@ -3,35 +3,33 @@
 part of 'app_database.dart';
 
 // **************************************************************************
-// MoorGenerator
+// DriftDatabaseGenerator
 // **************************************************************************
 
 // ignore_for_file: type=lint
 class UserSetting extends DataClass implements Insertable<UserSetting> {
-  final AppThemeOption selectedLanguage;
-  UserSetting({required this.selectedLanguage});
-  factory UserSetting.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return UserSetting(
-      selectedLanguage: $UserSettingsTable.$converter0.mapToDart(
-          const StringType().mapFromDatabaseResponse(
-              data['${effectivePrefix}selected_language']))!,
-    );
-  }
+  final int id;
+  final int userId;
+  final AppThemeOption theme;
+  const UserSetting(
+      {required this.id, required this.userId, required this.theme});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['user_id'] = Variable<int>(userId);
     {
       final converter = $UserSettingsTable.$converter0;
-      map['selected_language'] =
-          Variable<String>(converter.mapToSql(selectedLanguage)!);
+      map['theme'] = Variable<String>(converter.toSql(theme));
     }
     return map;
   }
 
   UserSettingsCompanion toCompanion(bool nullToAbsent) {
     return UserSettingsCompanion(
-      selectedLanguage: Value(selectedLanguage),
+      id: Value(id),
+      userId: Value(userId),
+      theme: Value(theme),
     );
   }
 
@@ -39,66 +37,96 @@ class UserSetting extends DataClass implements Insertable<UserSetting> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return UserSetting(
-      selectedLanguage:
-          serializer.fromJson<AppThemeOption>(json['selectedLanguage']),
+      id: serializer.fromJson<int>(json['id']),
+      userId: serializer.fromJson<int>(json['userId']),
+      theme: serializer.fromJson<AppThemeOption>(json['theme']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'selectedLanguage': serializer.toJson<AppThemeOption>(selectedLanguage),
+      'id': serializer.toJson<int>(id),
+      'userId': serializer.toJson<int>(userId),
+      'theme': serializer.toJson<AppThemeOption>(theme),
     };
   }
 
-  UserSetting copyWith({AppThemeOption? selectedLanguage}) => UserSetting(
-        selectedLanguage: selectedLanguage ?? this.selectedLanguage,
+  UserSetting copyWith({int? id, int? userId, AppThemeOption? theme}) =>
+      UserSetting(
+        id: id ?? this.id,
+        userId: userId ?? this.userId,
+        theme: theme ?? this.theme,
       );
   @override
   String toString() {
     return (StringBuffer('UserSetting(')
-          ..write('selectedLanguage: $selectedLanguage')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('theme: $theme')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => selectedLanguage.hashCode;
+  int get hashCode => Object.hash(id, userId, theme);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is UserSetting && other.selectedLanguage == this.selectedLanguage);
+      (other is UserSetting &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.theme == this.theme);
 }
 
 class UserSettingsCompanion extends UpdateCompanion<UserSetting> {
-  final Value<AppThemeOption> selectedLanguage;
+  final Value<int> id;
+  final Value<int> userId;
+  final Value<AppThemeOption> theme;
   const UserSettingsCompanion({
-    this.selectedLanguage = const Value.absent(),
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.theme = const Value.absent(),
   });
   UserSettingsCompanion.insert({
-    required AppThemeOption selectedLanguage,
-  }) : selectedLanguage = Value(selectedLanguage);
+    this.id = const Value.absent(),
+    required int userId,
+    required AppThemeOption theme,
+  })  : userId = Value(userId),
+        theme = Value(theme);
   static Insertable<UserSetting> custom({
-    Expression<AppThemeOption>? selectedLanguage,
+    Expression<int>? id,
+    Expression<int>? userId,
+    Expression<String>? theme,
   }) {
     return RawValuesInsertable({
-      if (selectedLanguage != null) 'selected_language': selectedLanguage,
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (theme != null) 'theme': theme,
     });
   }
 
-  UserSettingsCompanion copyWith({Value<AppThemeOption>? selectedLanguage}) {
+  UserSettingsCompanion copyWith(
+      {Value<int>? id, Value<int>? userId, Value<AppThemeOption>? theme}) {
     return UserSettingsCompanion(
-      selectedLanguage: selectedLanguage ?? this.selectedLanguage,
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      theme: theme ?? this.theme,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (selectedLanguage.present) {
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<int>(userId.value);
+    }
+    if (theme.present) {
       final converter = $UserSettingsTable.$converter0;
-      map['selected_language'] =
-          Variable<String>(converter.mapToSql(selectedLanguage.value)!);
+      map['theme'] = Variable<String>(converter.toSql(theme.value));
     }
     return map;
   }
@@ -106,7 +134,9 @@ class UserSettingsCompanion extends UpdateCompanion<UserSetting> {
   @override
   String toString() {
     return (StringBuffer('UserSettingsCompanion(')
-          ..write('selectedLanguage: $selectedLanguage')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('theme: $theme')
           ..write(')'))
         .toString();
   }
@@ -118,16 +148,26 @@ class $UserSettingsTable extends UserSettings
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $UserSettingsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _selectedLanguageMeta =
-      const VerificationMeta('selectedLanguage');
+  final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumnWithTypeConverter<AppThemeOption, String?>
-      selectedLanguage = GeneratedColumn<String?>(
-              'selected_language', aliasedName, false,
-              type: const StringType(), requiredDuringInsert: true)
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  final VerificationMeta _themeMeta = const VerificationMeta('theme');
+  @override
+  late final GeneratedColumnWithTypeConverter<AppThemeOption, String> theme =
+      GeneratedColumn<String>('theme', aliasedName, false,
+              type: DriftSqlType.string, requiredDuringInsert: true)
           .withConverter<AppThemeOption>($UserSettingsTable.$converter0);
   @override
-  List<GeneratedColumn> get $columns => [selectedLanguage];
+  List<GeneratedColumn> get $columns => [id, userId, theme];
   @override
   String get aliasedName => _alias ?? 'user_settings';
   @override
@@ -137,16 +177,33 @@ class $UserSettingsTable extends UserSettings
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    context.handle(_selectedLanguageMeta, const VerificationResult.success());
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    context.handle(_themeMeta, const VerificationResult.success());
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   UserSetting map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return UserSetting.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserSetting(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      userId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
+      theme: $UserSettingsTable.$converter0.fromSql(attachedDatabase
+          .options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}theme'])!),
+    );
   }
 
   @override
@@ -158,11 +215,148 @@ class $UserSettingsTable extends UserSettings
       const AppThemeOptionConverter();
 }
 
+class User extends DataClass implements Insertable<User> {
+  final int id;
+  const User({required this.id});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    return map;
+  }
+
+  UsersCompanion toCompanion(bool nullToAbsent) {
+    return UsersCompanion(
+      id: Value(id),
+    );
+  }
+
+  factory User.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return User(
+      id: serializer.fromJson<int>(json['id']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+    };
+  }
+
+  User copyWith({int? id}) => User(
+        id: id ?? this.id,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('User(')
+          ..write('id: $id')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is User && other.id == this.id);
+}
+
+class UsersCompanion extends UpdateCompanion<User> {
+  final Value<int> id;
+  const UsersCompanion({
+    this.id = const Value.absent(),
+  });
+  UsersCompanion.insert({
+    this.id = const Value.absent(),
+  });
+  static Insertable<User> custom({
+    Expression<int>? id,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+    });
+  }
+
+  UsersCompanion copyWith({Value<int>? id}) {
+    return UsersCompanion(
+      id: id ?? this.id,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UsersCompanion(')
+          ..write('id: $id')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $UsersTable extends Users with TableInfo<$UsersTable, User> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UsersTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  @override
+  List<GeneratedColumn> get $columns => [id];
+  @override
+  String get aliasedName => _alias ?? 'users';
+  @override
+  String get actualTableName => 'users';
+  @override
+  VerificationContext validateIntegrity(Insertable<User> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  User map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return User(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+    );
+  }
+
+  @override
+  $UsersTable createAlias(String alias) {
+    return $UsersTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
-  _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  _$AppDatabase(QueryExecutor e) : super(e);
   late final $UserSettingsTable userSettings = $UserSettingsTable(this);
+  late final $UsersTable users = $UsersTable(this);
   @override
-  Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+  Iterable<TableInfo<Table, dynamic>> get allTables =>
+      allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [userSettings];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [userSettings, users];
 }

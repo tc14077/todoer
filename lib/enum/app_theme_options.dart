@@ -35,13 +35,13 @@ class AppThemeOptionConverter extends TypeConverter<AppThemeOption, String> {
   const AppThemeOptionConverter();
 
   @override
-  AppThemeOption? mapToDart(String? fromDb) {
-    if (fromDb == null) return null;
-    return AppThemeOption.fromID(fromDb);
+  AppThemeOption fromSql(String fromDb) {
+    return AppThemeOption.fromID(fromDb) ?? AppThemeOption.light;
   }
 
   @override
-  String? mapToSql(AppThemeOption? value) {
-    return value.toString();
+  String toSql(AppThemeOption value) {
+    // TODO: implement toSql
+    throw UnimplementedError();
   }
 }

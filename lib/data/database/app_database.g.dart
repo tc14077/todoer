@@ -2,10 +2,6 @@
 
 part of 'app_database.dart';
 
-// **************************************************************************
-// DriftDatabaseGenerator
-// **************************************************************************
-
 // ignore_for_file: type=lint
 class UserSetting extends DataClass implements Insertable<UserSetting> {
   final int id;
@@ -19,7 +15,7 @@ class UserSetting extends DataClass implements Insertable<UserSetting> {
     map['id'] = Variable<int>(id);
     map['user_id'] = Variable<int>(userId);
     {
-      final converter = $UserSettingsTable.$converter0;
+      final converter = $UserSettingsTable.$convertertheme;
       map['theme'] = Variable<String>(converter.toSql(theme));
     }
     return map;
@@ -125,7 +121,7 @@ class UserSettingsCompanion extends UpdateCompanion<UserSetting> {
       map['user_id'] = Variable<int>(userId.value);
     }
     if (theme.present) {
-      final converter = $UserSettingsTable.$converter0;
+      final converter = $UserSettingsTable.$convertertheme;
       map['theme'] = Variable<String>(converter.toSql(theme.value));
     }
     return map;
@@ -148,24 +144,26 @@ class $UserSettingsTable extends UserSettings
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $UserSettingsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _userIdMeta = const VerificationMeta('userId');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
       'user_id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _themeMeta = const VerificationMeta('theme');
+  static const VerificationMeta _themeMeta = const VerificationMeta('theme');
   @override
   late final GeneratedColumnWithTypeConverter<AppThemeOption, String> theme =
       GeneratedColumn<String>('theme', aliasedName, false,
               type: DriftSqlType.string, requiredDuringInsert: true)
-          .withConverter<AppThemeOption>($UserSettingsTable.$converter0);
+          .withConverter<AppThemeOption>($UserSettingsTable.$convertertheme);
   @override
   List<GeneratedColumn> get $columns => [id, userId, theme];
   @override
@@ -196,12 +194,12 @@ class $UserSettingsTable extends UserSettings
   UserSetting map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return UserSetting(
-      id: attachedDatabase.options.types
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      userId: attachedDatabase.options.types
+      userId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
-      theme: $UserSettingsTable.$converter0.fromSql(attachedDatabase
-          .options.types
+      theme: $UserSettingsTable.$convertertheme.fromSql(attachedDatabase
+          .typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}theme'])!),
     );
   }
@@ -211,7 +209,7 @@ class $UserSettingsTable extends UserSettings
     return $UserSettingsTable(attachedDatabase, alias);
   }
 
-  static TypeConverter<AppThemeOption, String> $converter0 =
+  static TypeConverter<AppThemeOption, String> $convertertheme =
       const AppThemeOptionConverter();
 }
 
@@ -327,14 +325,16 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $UsersTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
+      hasAutoIncrement: true,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
@@ -368,9 +368,9 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   User map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return User(
-      id: attachedDatabase.options.types
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      name: attachedDatabase.options.types
+      name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
     );
   }
@@ -386,7 +386,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $UserSettingsTable userSettings = $UserSettingsTable(this);
   late final $UsersTable users = $UsersTable(this);
   @override
-  Iterable<TableInfo<Table, dynamic>> get allTables =>
+  Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [userSettings, users];

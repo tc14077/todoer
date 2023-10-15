@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:todoer/bloc/app_theme/app_theme_cubit.dart';
 import 'package:todoer/enum/app_theme_options.dart';
 import 'package:todoer/navigation/beamer/main_router.dart';
@@ -10,6 +11,7 @@ import 'package:todoer/ui/system/themes.dart';
 
 import 'bloc/bottom_nav_bar/cubit/bottom_nav_bar_cubit.dart';
 
+final getIt = GetIt.instance;
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -34,10 +36,9 @@ class _MyAppState extends State<MyApp> {
               .routerDelegate as BeamerDelegate)
           .currentBeamLocation;
       final beamState = currentBeamLocation.state;
-      String currentUri = "";
-      currentUri = (beamState as BeamState).uriBlueprint.path;
+      final currentUri = (beamState as BeamState).uriBlueprint.path;
       // TODO use logger
-      // print('uriBlueprint: $currentUri');
+      print('uriBlueprint: $currentUri');
     };
     BeamerMainRouter.routerDelegate.addListener(_beamerListener);
   }

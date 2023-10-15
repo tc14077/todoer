@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todoer/bloc/app_theme/app_theme_cubit.dart';
 import 'package:todoer/navigation/beamer/main_beamer.dart';
 
 import '../../enum/general_setting_item.dart';

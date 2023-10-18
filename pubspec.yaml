@@ -43,6 +43,7 @@ dependencies:
   path: ^1.8.3
   json_annotation: ^4.8.1
   get_it: ^7.6.4
+  table_calendar: ^3.0.9
 
 dev_dependencies:
   flutter_test:

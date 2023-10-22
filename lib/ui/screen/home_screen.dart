@@ -43,6 +43,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           onDaySelected: (day) {},
                         ),
                       ),
+                      actions: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.all(16.0),
+                            textStyle: const TextStyle(fontSize: 15),
+                          ),
+                          onPressed: (){
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                      ],
                     );
                   },
                 );

@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+//TODO fix unknown height issue
 class TableCalendarWidget extends StatefulWidget {
   final DateTime focusedDay;
   final Function(DateTime day) onDaySelected;
@@ -42,7 +44,6 @@ class TableCalendarWidgetState extends State<TableCalendarWidget> {
         selectedDayPredicate: (day) {
           // Use `selectedDayPredicate` to determine which day is currently selected.
           // If this returns true, then `day` will be marked as selected.
-
           // Using `isSameDay` is recommended to disregard
           // the time-part of compared DateTime objects.
           return isSameDay(_selectedDay, day);

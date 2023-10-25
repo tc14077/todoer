@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 
 import '../widget/table_calendar_widget.dart';
@@ -12,11 +13,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _selectedDay = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
+    final selectedDayTimeString = DateFormat('MMM d, EEE').format(_selectedDay);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Plannable Booking'),
+        title: const TitleLargeText('Plannable Booking'),
       ),
       body: Container(
         width: double.infinity,
@@ -25,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             TextButton(
               style: TextButton.styleFrom(
-                foregroundColor: Colors.black,
                 padding: const EdgeInsets.all(16.0),
                 textStyle: const TextStyle(fontSize: 20),
               ),
@@ -35,7 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text('Basic dialog title'),
+                      title:
+                          Center(child: BodyLargeText(selectedDayTimeString)),
                       content: SizedBox(
                         width: widgetWidth!,
                         child: TableCalendarWidget(
@@ -49,17 +53,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.all(16.0),
                             textStyle: const TextStyle(fontSize: 15),
                           ),
-                          onPressed: (){
+                          onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: const Text('Cancel'),
+                          child: const BodyMediumText('Cancel'),
                         ),
                       ],
                     );
                   },
                 );
               },
-              child: const Text('Gradient'),
+              child: BodyLargeText(selectedDayTimeString),
             ),
           ],
         ),

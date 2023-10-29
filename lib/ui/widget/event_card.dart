@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 
 import '../../data/models/event.dart';
+import 'invitee_indicator.dart';
 
 /// Displays the event item on a Card together with DateTime information
 ///
@@ -47,6 +48,9 @@ class EventCard extends StatelessWidget {
                       children: [
                         BodyMediumText(event.name),
                         const Spacer(),
+                        InviteeIndicator(
+                          numberOfInvitee: event.invitees?.length,
+                        ),
                       ],
                     ),
                   ],

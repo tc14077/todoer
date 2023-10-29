@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:todoer/data/models/invitee.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 import 'package:todoer/ui/widget/animated_event_list.dart';
 
@@ -18,10 +19,12 @@ final mocking = [
   Event(
     'Booking 1',
     DateTime(2023, 11, 1, 12, 00),
+    invitees: [Invitee('Tom')],
   ),
   Event(
     'Booking 2',
     DateTime(2023, 11, 1, 12, 00),
+    invitees: [Invitee('Tom'), Invitee('Louie')],
   ),
   Event(
     'Booking 3',

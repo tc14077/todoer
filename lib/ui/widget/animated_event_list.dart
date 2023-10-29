@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todoer/ui/screen/home_screen.dart';
 
+import '../../data/models/event.dart';
 import 'event_card.dart';
 
 class AnimatedEventList extends StatelessWidget {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:todoer/ui/screen/home_screen.dart';
 import 'package:todoer/ui/system/themed_text.dart';
+
+import '../../data/models/event.dart';
 
 /// Displays the event item on a Card together with DateTime information
 ///

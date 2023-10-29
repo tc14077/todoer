@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 import 'package:todoer/ui/widget/animated_event_list.dart';
 
+import '../../data/models/event.dart';
 import '../widget/table_calendar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -141,12 +142,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
-
-// MOCKING
-class Event {
-  final String name;
-  final DateTime time;
-
-  Event(this.name, this.time);
 }

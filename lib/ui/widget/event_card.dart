@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:todoer/ui/screen/home_screen.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 
@@ -17,7 +18,6 @@ class EventCard extends StatelessWidget {
   final Animation<double> animation;
   final VoidCallback? onTap;
   final Event event;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +28,28 @@ class EventCard extends StatelessWidget {
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: onTap,
-          child: SizedBox(
-            height: 80.0,
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 80),
             child: Card(
-              child: Center(
-                child: BodyMediumText(event.name),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BodyMediumText(
+                      DateFormat('hh:mm').format(event.time),
+                      textAlign: TextAlign.left,
+                    ),
+                    const SizedBox.square(dimension: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BodyMediumText(event.name),
+                        const Spacer(),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

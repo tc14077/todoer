@@ -34,7 +34,7 @@ class AppDatabase extends _$AppDatabase {
       onUpgrade: (Migrator m, int from, int to) async {
         // disable foreign_keys before migrations
         await customStatement('PRAGMA foreign_keys = OFF');
-        
+
         if (from < 2) {
           await m.addColumn(users, users.name);
         }
@@ -47,6 +47,18 @@ class AppDatabase extends _$AppDatabase {
         await customStatement('PRAGMA foreign_keys = ON');
       },
     );
+  }
+
+  Future<Event> getEventById({required int eventId}) {
+    return (select(events)..where((t) => t.id.equals(eventId))).getSingle();
+  }
+
+  Future<List<Event>> getAllEvents() {
+    final query = select(events);
+    query.orderBy([
+      (t) => OrderingTerm.asc(t.happenedAt),
+    ]);
+    return query.get();
   }
 }
 

@@ -1,0 +1,113 @@
+import 'package:drift/drift.dart';
+import 'package:todoer/data/database/app_database.dart';
+import 'package:todoer/data/models/base_table.dart';
+
+extension FindById<Table extends HasResultSet, Row>
+    on ResultSetImplementation<Table, Row> {
+  Selectable<Row> findById(int id) {
+    return select()
+      ..where((row) {
+        final idColumn = columnsByName['id'];
+        if (idColumn == null) {
+          throw ArgumentError.value(
+              this, 'this', 'Must be a table with an id column');
+        }
+        if (idColumn.type != DriftSqlType.int) {
+          throw ArgumentError('Column `id` is not an integer');
+        }
+        return idColumn.equals(id);
+      });
+  }
+
+  Selectable<Row> findByIds(Set<int> ids) {
+    return select()
+      ..where((row) {
+        final idColumn = columnsByName['id'];
+        if (idColumn == null) {
+          throw ArgumentError.value(
+              this, 'this', 'Must be a table with an id column');
+        }
+        if (idColumn.type != DriftSqlType.int) {
+          throw ArgumentError('Column `id` is not an integer');
+        }
+        return ids.any((id) => idColumn.equals(id));
+      });
+  }
+}
+class BaseDao<K extends BaseTable, R> {
+  final AppDatabase appDatabase;
+  final ResultSetImplementation<K, R> table;
+
+
+  BaseDao({required this.appDatabase, required this.table});
+
+  Future<List<R>> findAll() {
+    final query = appDatabase.select(table);
+    return query.get();
+  }
+
+  Stream<R?> findByIdAsStream(int id){
+    final query = table.findById(id);
+    return query.watchSingle();
+  }
+
+  Future<R> findById(int id){
+    return table.findById(id).getSingle();
+  }
+
+  Future<List<T>> findByIds(List<int> ids);
+
+  // insert
+  Future<int> insertSingle(T t);
+
+  // insert
+  Future<List<int>> insertMultiple(List<T> ts);
+
+  // Update(onConflict: OnConflictStrategy.ignore)
+  Future<int> updateSingle(T t);
+
+  // Update(onConflict: OnConflictStrategy.ignore)
+  Future<int> updateMultiple(List<T> ts);
+
+  // delete
+  Future<void> deleteSingle(T t);
+
+  // delete
+  Future<int> deleteMultiple(List<T> ts);
+
+  // transaction
+  Future<void> deleteById(int id) async {
+    final oldModel = await findById(id);
+    if (oldModel != null) {
+      await deleteSingle(oldModel);
+    }
+  }
+
+  Future<void> deleteAll();
+
+  // transaction
+  Future<void> upsertSingle(T newModel) async {
+    final oldModel = await findById(newModel.id);
+    if (oldModel == null) {
+      await insertSingle(newModel);
+    } else {
+      await updateSingle(newModel);
+    }
+  }
+
+  // transaction
+  Future<void> upsertMultiple(List<T> newModels) async {
+    final newModelsids = newModels.map((model) => model.id).toList();
+    final oldModels = await findByIds(newModelsids);
+    final oldModelsIds = oldModels.map((model) => model.id).toList();
+    List<T> modelsUpdate = [];
+    List<T> modelsInsert = [];
+    newModels.forEach((model) {
+      oldModelsIds.contains(model.id)
+          ? modelsUpdate.add(model)
+          : modelsInsert.add(model);
+    });
+    await insertMultiple(modelsInsert);
+    await updateMultiple(modelsUpdate);
+  }
+}

@@ -107,29 +107,29 @@ class BaseDao<K extends BaseTable, R> {
     return (table as TableInfo).deleteAll();
   }
 
-  // transaction
-  Future<void> upsertSingle(T newModel) async {
-    final oldModel = await findById(newModel.id);
-    if (oldModel == null) {
-      await insertSingle(newModel);
-    } else {
-      await updateSingle(newModel);
-    }
-  }
+  // // transaction
+  // Future<void> upsertSingle(T newModel) async {
+  //   final oldModel = await findById(newModel.id);
+  //   if (oldModel == null) {
+  //     await insertSingle(newModel);
+  //   } else {
+  //     await updateSingle(newModel);
+  //   }
+  // }
 
-  // transaction
-  Future<void> upsertMultiple(List<T> newModels) async {
-    final newModelsids = newModels.map((model) => model.id).toList();
-    final oldModels = await findByIds(newModelsids);
-    final oldModelsIds = oldModels.map((model) => model.id).toList();
-    List<T> modelsUpdate = [];
-    List<T> modelsInsert = [];
-    newModels.forEach((model) {
-      oldModelsIds.contains(model.id)
-          ? modelsUpdate.add(model)
-          : modelsInsert.add(model);
-    });
-    await insertMultiple(modelsInsert);
-    await updateMultiple(modelsUpdate);
-  }
+  // // transaction
+  // Future<void> upsertMultiple(List<T> newModels) async {
+  //   final newModelsids = newModels.map((model) => model.id).toList();
+  //   final oldModels = await findByIds(newModelsids);
+  //   final oldModelsIds = oldModels.map((model) => model.id).toList();
+  //   List<T> modelsUpdate = [];
+  //   List<T> modelsInsert = [];
+  //   newModels.forEach((model) {
+  //     oldModelsIds.contains(model.id)
+  //         ? modelsUpdate.add(model)
+  //         : modelsInsert.add(model);
+  //   });
+  //   await insertMultiple(modelsInsert);
+  //   await updateMultiple(modelsUpdate);
+  // }
 }

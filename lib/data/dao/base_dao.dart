@@ -34,10 +34,27 @@ extension FindById<Table extends HasResultSet, Row>
       });
   }
 }
+
+extension DeleteById<TableDsl extends Table, D> on TableInfo<TableDsl, D> {
+  DeleteStatement<TableDsl, D> deleteById(int id) {
+    return delete()
+      ..where((row) {
+        final idColumn = columnsByName['id'];
+        if (idColumn == null) {
+          throw ArgumentError.value(
+              this, 'this', 'Must be a table with an id column');
+        }
+        if (idColumn.type != DriftSqlType.int) {
+          throw ArgumentError('Column `id` is not an integer');
+        }
+        return idColumn.equals(id);
+      });
+  }
+}
+
 class BaseDao<K extends BaseTable, R> {
   final AppDatabase appDatabase;
   final ResultSetImplementation<K, R> table;
-
 
   BaseDao({required this.appDatabase, required this.table});
 
@@ -46,46 +63,49 @@ class BaseDao<K extends BaseTable, R> {
     return query.get();
   }
 
-  Stream<R?> findByIdAsStream(int id){
+  Stream<R?> findByIdAsStream(int id) {
     final query = table.findById(id);
     return query.watchSingle();
   }
 
-  Future<R> findById(int id){
+  Future<R> findById(int id) {
     return table.findById(id).getSingle();
   }
 
-  Future<List<R>> findByIds(Set<int> ids){
+  Future<List<R>> findByIds(Set<int> ids) {
     return table.findByIds(ids).get();
   }
 
   // insert
-  Future<int> insertSingle(T t);
-
-  // insert
-  Future<List<int>> insertMultiple(List<T> ts);
-
-  // Update(onConflict: OnConflictStrategy.ignore)
-  Future<int> updateSingle(T t);
-
-  // Update(onConflict: OnConflictStrategy.ignore)
-  Future<int> updateMultiple(List<T> ts);
-
-  // delete
-  Future<void> deleteSingle(T t);
-
-  // delete
-  Future<int> deleteMultiple(List<T> ts);
-
-  // transaction
-  Future<void> deleteById(int id) async {
-    final oldModel = await findById(id);
-    if (oldModel != null) {
-      await deleteSingle(oldModel);
-    }
+  Future<int> insertSingle(Insertable<R> entry) {
+    return (table as TableInfo).insertOne(entry);
   }
 
-  Future<void> deleteAll();
+  // insert
+  Future<void> insertMultiple(List<Insertable<R>> rs) {
+    return (table as TableInfo).insertAll(rs);
+  }
+
+  // // Update(onConflict: OnConflictStrategy.ignore)
+  // Future<int> updateSingle(T t);
+
+  // // Update(onConflict: OnConflictStrategy.ignore)
+  // Future<int> updateMultiple(List<T> ts);
+
+  // // delete
+  // Future<void> deleteSingle(T t);
+
+  // // delete
+  // Future<int> deleteMultiple(List<T> ts);
+
+  // transaction
+  Future<int> deleteById(int id) async {
+    return (table as TableInfo).deleteById(id).go();
+  }
+
+  Future<int> deleteAll() {
+    return (table as TableInfo).deleteAll();
+  }
 
   // transaction
   Future<void> upsertSingle(T newModel) async {

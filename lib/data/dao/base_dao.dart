@@ -30,7 +30,7 @@ extension FindById<Table extends HasResultSet, Row>
         if (idColumn.type != DriftSqlType.int) {
           throw ArgumentError('Column `id` is not an integer');
         }
-        return ids.any((id) => idColumn.equals(id));
+        return idColumn.isIn(ids);
       });
   }
 }
@@ -55,7 +55,9 @@ class BaseDao<K extends BaseTable, R> {
     return table.findById(id).getSingle();
   }
 
-  Future<List<T>> findByIds(List<int> ids);
+  Future<List<R>> findByIds(Set<int> ids){
+    return table.findByIds(ids).get();
+  }
 
   // insert
   Future<int> insertSingle(T t);

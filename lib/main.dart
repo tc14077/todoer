@@ -5,8 +5,12 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:todoer/bloc/app_theme/app_theme_cubit.dart';
+import 'package:todoer/data/dao/event_dao.dart';
+import 'package:todoer/data/dao/invitee_dao.dart';
 import 'package:todoer/enum/app_theme_options.dart';
 import 'package:todoer/navigation/beamer/main_router.dart';
+import 'package:todoer/repositories/event_repository.dart';
+import 'package:todoer/repositories/invitee_repository.dart';
 import 'package:todoer/ui/system/themes.dart';
 
 import 'bloc/bottom_nav_bar/cubit/bottom_nav_bar_cubit.dart';
@@ -16,6 +20,9 @@ final getIt = GetIt.instance;
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final database = AppDatabase();
+  getIt.registerSingleton(database);
+  getIt.registerSingleton(EventRepository(EventsDao(database)));
+  getIt.registerSingleton(InviteeRepository(InviteeDao(database)));
 
   runApp(const MyApp());
 }

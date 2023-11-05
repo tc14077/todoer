@@ -50,7 +50,9 @@ class EventCard extends StatelessWidget {
                       children: [
                         BodyMediumText(event.name),
                         const Spacer(),
-                        InviteeIndicator(numberOfInvitee: invitees?.length,),
+                        InviteeIndicator(
+                          numberOfInvitee: invitees?.length,
+                        ),
                       ],
                     ),
                   ],

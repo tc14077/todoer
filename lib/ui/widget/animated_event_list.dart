@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../data/models/event.dart';
+import '../../data/database/app_database.dart';
 import 'event_card.dart';
 
 class AnimatedEventList extends StatelessWidget {

@@ -5,7 +5,7 @@ import 'package:todoer/data/models/events.dart';
 @DataClassName('Invitee')
 class Invitees extends BaseTable {
   TextColumn get name => text()();
-  DateTimeColumn get createdAt => dateTime()();
+  TextColumn get phoneNumber => text().nullable()();
   IntColumn get event => integer().nullable().references(
         Events,
         #id,

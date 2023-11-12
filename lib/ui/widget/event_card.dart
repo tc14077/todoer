@@ -15,11 +15,13 @@ class EventCard extends StatelessWidget {
     this.onTap,
     required this.animation,
     required this.event,
+    this.invitees,
   });
 
   final Animation<double> animation;
   final VoidCallback? onTap;
   final Event event;
+  final List<Invitee>? invitees;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class EventCard extends StatelessWidget {
                         BodyMediumText(event.name),
                         const Spacer(),
                         InviteeIndicator(
-                          numberOfInvitee: event.invitees?.length,
+                          numberOfInvitee: invitees?.length,
                         ),
                       ],
                     ),

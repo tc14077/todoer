@@ -29,7 +29,7 @@ class InviteeDao extends BaseDao<Invitees, Invitee> {
           table: db.invitees,
         );
 
-  Future<List<Invitee>> inviteesInEvent(Event event) {
+  Future<List<Invitee>> getInviteesInEvent(Event event) {
     return (db.select(db.invitees)..where((t) => t.event.equals(event.id))).get();
   }
 }

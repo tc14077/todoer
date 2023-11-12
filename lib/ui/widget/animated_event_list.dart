@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:todoer/data/display_items/event_display_item.dart';
 
-import '../../data/database/app_database.dart';
 import 'event_card.dart';
 
 class AnimatedEventList extends StatelessWidget {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  final List<Event> events;
-  late final ListModel<Event> _list;
+  final List<EventDisplayItem> events;
+  late final ListModel<EventDisplayItem> _list;
 
   AnimatedEventList({
     super.key,
     required this.events,
   }) {
-    _list = ListModel<Event>(
+    _list = ListModel<EventDisplayItem>(
       listKey: _listKey,
       removedItemBuilder: _buildRemovedItem,
       initialItems: events,
@@ -25,9 +25,11 @@ class AnimatedEventList extends StatelessWidget {
     int index,
     Animation<double> animation,
   ) {
+    final item =  _list[index];
     return EventCard(
       animation: animation,
-      event: _list[index],
+      event: item.event,
+      invitees: item.invitees,
       onTap: () {},
     );
   }
@@ -49,13 +51,14 @@ class AnimatedEventList extends StatelessWidget {
   /// The widget will be used by the [AnimatedListState.removeItem] method's
   /// [AnimatedRemovedItemBuilder] parameter.
   Widget _buildRemovedItem(
-    Event item,
+    EventDisplayItem item,
     BuildContext context,
     Animation<double> animation,
   ) {
     return EventCard(
       animation: animation,
-      event: item,
+      event: item.event,
+      invitees: item.invitees,
       // No gesture detector here: we don't want removed items to be interactive.
     );
   }

@@ -1,38 +1,39 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todoer/bloc/event_listing/event_listing_bloc.dart';
 import 'package:todoer/main.dart';
 import 'package:todoer/repositories/event_repository.dart';
+import 'package:todoer/repositories/invitee_repository.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 import 'package:todoer/ui/widget/animated_event_list.dart';
 
 import '../../data/database/app_database.dart';
-import '../widget/table_calendar_widget.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key, required this.title}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
   final String title;
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider<EventListingBloc>(
+      create: (context) => EventListingBloc(
+        eventRepository: getIt<EventRepository>(),
+        inviteeRepository: getIt<InviteeRepository>(),
+      ),
+      child: HomeWidget(),
+    );
+  }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final _selectedDay = DateTime.now();
-  List<Event> events = [];
-
-  @override
-  void initState() {
-    getIt<EventRepository>().getAllItems().then((value) {
-      events = value;
-      setState(() {});
-    });
-    super.initState();
-  }
+class HomeWidget extends StatelessWidget {
+  HomeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final selectedDayTimeString = DateFormat('MMM d, EEE').format(_selectedDay);
     return Scaffold(
       appBar: AppBar(
         title: const TitleLargeText('Plannable Booking'),
@@ -53,57 +54,28 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: const Icon(
             Icons.add,
           )),
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TextButton(
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.all(16.0),
-                textStyle: const TextStyle(fontSize: 20),
-              ),
-              onPressed: () {
-                final widgetWidth = context.size?.width;
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Center(
-                        child: BodyLargeText(selectedDayTimeString),
+        child: BlocBuilder<EventListingBloc, EventListingState>(
+          builder: (context, state) {
+            return switch (state) {
+              EventsLoadInProgress() => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              EventsLoadSuccess(eventDisplayItems: var eventDisplayItems) =>
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: AnimatedEventList(events: eventDisplayItems),
                       ),
-                      content: SizedBox(
-                        width: widgetWidth!,
-                        child: TableCalendarWidget(
-                          focusedDay: DateTime.now(),
-                          onDaySelected: (day) {},
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.all(16.0),
-                            textStyle: const TextStyle(fontSize: 15),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const BodyMediumText('Cancel'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: BodyLargeText(selectedDayTimeString),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: AnimatedEventList(events: events),
-              ),
-            ),
-          ],
+                    ),
+                  ],
+                )
+            };
+          },
         ),
       ),
     );

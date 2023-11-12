@@ -6,7 +6,7 @@ sealed class EventListingState extends Equatable {
   List<Object?> get props => [];
 }
 
-final class EventListingInitial extends EventListingState {}
+final class EventsLoadInProgress extends EventListingState {}
 
 final class EventsLoadSuccess extends EventListingState {
   final List<EventDisplayItem> eventDisplayItems;

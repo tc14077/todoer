@@ -14,11 +14,11 @@ class EventListingBloc extends Bloc<EventListingEvent, EventListingState> {
   final EventRepository eventRepository;
   final InviteeRepository inviteeRepository;
   EventListingBloc({
-    required DateTime initialDate,
     required this.eventRepository,
     required this.inviteeRepository,
-  }) : super(EventListingInitial()) {
+  }) : super(EventsLoadInProgress()) {
     on<_InitialLoadRequested>(_onInitialLoadRequested);
+    add(_InitialLoadRequested());
   }
 
   FutureOr<void> _onInitialLoadRequested(

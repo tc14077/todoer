@@ -10,10 +10,12 @@ import 'package:todoer/navigation/beamer/main_router.dart';
 import 'package:todoer/ui/system/themes.dart';
 
 import 'bloc/bottom_nav_bar/cubit/bottom_nav_bar_cubit.dart';
+import 'data/database/app_database.dart';
 
 final getIt = GetIt.instance;
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  final database = AppDatabase();
 
   runApp(const MyApp());
 }

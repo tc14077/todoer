@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 class HomeWidget extends StatelessWidget {
-  HomeWidget({super.key});
+  const HomeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

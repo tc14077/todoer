@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:todoer/data/display_items/event_display_item.dart';
@@ -27,11 +29,18 @@ class EventListingBloc extends Bloc<EventListingEvent, EventListingState> {
   ) async {
     final events = await eventRepository.getAllItems();
     final List<EventDisplayItem> eventDisplayItems = [];
-    
-    for(final event in events){
+
+    for (final event in events) {
       final invitees = await inviteeRepository.getInviteesInEvent(event: event);
       eventDisplayItems.add(EventDisplayItem(event, invitees: invitees));
     }
-     emit(EventsLoadSuccess(eventDisplayItems: eventDisplayItems));
+
+    eventDisplayItems.sort();
+
+    final itemMap = eventDisplayItems.groupListsBy<DateTime>((item){
+      return DateUtils.dateOnly(item.event.happenedAt);
+    });
+
+    emit(EventsLoadSuccess(eventDisplayItems: eventDisplayItems));
   }
 }

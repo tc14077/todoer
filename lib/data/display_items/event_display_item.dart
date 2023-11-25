@@ -2,9 +2,10 @@
 // invitees.
 import 'package:equatable/equatable.dart';
 import 'package:todoer/data/database/app_database.dart';
+import 'package:todoer/data/display_items/displayable.dart';
 import 'package:todoer/data/models/events.dart';
 
-class EventDisplayItem extends Equatable implements Comparable{
+class EventDisplayItem extends Equatable implements Comparable<EventDisplayItem>, Displayable {
   const EventDisplayItem(this.event, {this.invitees});
 
   final Event event;
@@ -12,9 +13,9 @@ class EventDisplayItem extends Equatable implements Comparable{
 
   @override
   List<Object?> get props => [event, invitees];
-  
+
   @override
   int compareTo(other) {
-    return event.compareHappenedDateTo(other);
+    return event.compareHappenedDateTo(other.event);
   }
 }

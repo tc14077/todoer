@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/display_items/displayable.dart';
 import 'event_card.dart';
+import 'model/list_model.dart';
 
 class AnimatedEventList extends StatelessWidget {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();

@@ -6,7 +6,7 @@ import 'package:todoer/main.dart';
 import 'package:todoer/repositories/event_repository.dart';
 import 'package:todoer/repositories/invitee_repository.dart';
 import 'package:todoer/ui/system/themed_text.dart';
-import 'package:todoer/ui/widget/animated_event_list.dart';
+import 'package:todoer/ui/widget/animated_full_event_list.dart';
 
 import '../../data/database/app_database.dart';
 
@@ -62,14 +62,14 @@ class HomeWidget extends StatelessWidget {
               EventsLoadInProgress() => const Center(
                   child: CircularProgressIndicator(),
                 ),
-              EventsLoadSuccess(eventDisplayItems: var eventDisplayItems) =>
+              EventsLoadSuccess(eventDisplayItemMap: var itemMap) =>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: AnimatedEventList(events: eventDisplayItems),
+                        child: AnimatedFullEventList(eventMap: itemMap),
                       ),
                     ),
                   ],

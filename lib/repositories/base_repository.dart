@@ -12,6 +12,10 @@ abstract class BasePersistRepository<T extends BaseTable, R> {
     return dao.findAll();
   }
 
+  Stream<List<R>> getAllItemsAsStream() {
+    return dao.findAllAsStream();
+  }
+
   Stream<R?> getItemByIdAsStream(int id) {
     return dao.findByIdAsStream(id);
   }

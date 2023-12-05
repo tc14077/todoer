@@ -4,10 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:todoer/data/display_items/event_display_item.dart';
 import 'package:todoer/repositories/event_repository.dart';
 import 'package:todoer/repositories/invitee_repository.dart';
+
+import '../../data/display_items/displayable.dart';
 
 part 'event_listing_event.dart';
 part 'event_listing_state.dart';
@@ -37,10 +37,10 @@ class EventListingBloc extends Bloc<EventListingEvent, EventListingState> {
 
     eventDisplayItems.sort();
 
-    final itemMap = eventDisplayItems.groupListsBy<DateTime>((item){
-      return DateUtils.dateOnly(item.event.happenedAt);
+    final itemMap = eventDisplayItems.groupListsBy<DateDisplayItem>((item){
+      return DateDisplayItem(dateTime: DateUtils.dateOnly(item.event.happenedAt));
     });
 
-    emit(EventsLoadSuccess(eventDisplayItems: eventDisplayItems));
+    emit(EventsLoadSuccess(eventDisplayItemMap: itemMap));
   }
 }

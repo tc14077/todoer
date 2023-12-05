@@ -9,10 +9,10 @@ sealed class EventListingState extends Equatable {
 final class EventsLoadInProgress extends EventListingState {}
 
 final class EventsLoadSuccess extends EventListingState {
-  final List<EventDisplayItem> eventDisplayItems;
+  final Map<DateDisplayItem, List<EventDisplayItem>> eventDisplayItemMap;
 
-  EventsLoadSuccess({required this.eventDisplayItems});
+  EventsLoadSuccess({required this.eventDisplayItemMap});
 
   @override
-  List<Object?> get props => [eventDisplayItems];
+  List<Object?> get props => [eventDisplayItemMap];
 }

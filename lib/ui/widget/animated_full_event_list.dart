@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:todoer/data/display_items/displayable.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 
@@ -41,7 +42,7 @@ class AnimatedFullEventList extends StatelessWidget {
       onTap: () {},
       // No gesture detector here: we don't want removed items to be interactive.
     ),
-    DateDisplayItem(dateTime: var dateTime) => BodyMediumText(dateTime.toString())
+    DateDisplayItem(dateTime: var dateTime) => TitleMediumText(DateFormat('dd/MM/yyyy').format(dateTime))
     };
   }
 

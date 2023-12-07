@@ -39,6 +39,8 @@ class AnimatedFullEventList extends StatelessWidget {
       animation: animation,
       event: event,
       invitees: invitees,
+      contactName: invitees?.firstOrNull?.name,
+      contactNumber: invitees?.firstOrNull?.phoneNumber,
       onTap: () {},
       // No gesture detector here: we don't want removed items to be interactive.
     ),

@@ -16,15 +16,28 @@ class EventCard extends StatelessWidget {
     required this.animation,
     required this.event,
     this.invitees,
+    this.contactName,
+    this.contactNumber,
   });
 
   final Animation<double> animation;
   final VoidCallback? onTap;
   final Event event;
   final List<Invitee>? invitees;
+  final String? contactName;
+  final String? contactNumber;
 
   @override
   Widget build(BuildContext context) {
+    String? contactString;
+    if (contactName != null && contactNumber != null) {
+      contactString = '👤: $contactName, 📞: $contactNumber';
+    } else if (contactName != null) {
+      contactString = '👤: $contactName';
+    } else if (contactNumber != null) {
+      contactString = '📞: $contactNumber';
+    }
+
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: SizeTransition(
@@ -41,14 +54,21 @@ class EventCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     BodyMediumText(
-                      DateFormat('hh:mm').format(event.happenedAt),
+                      DateFormat('dd/MM, hh:mm aa').format(event.happenedAt),
                       textAlign: TextAlign.left,
                     ),
                     const SizedBox.square(dimension: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        BodyMediumText(event.name),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            BodyMediumText(event.name),
+                            if (contactString != null)
+                              BodyMediumText(contactString),
+                          ],
+                        ),
                         const Spacer(),
                         InviteeIndicator(
                           numberOfInvitee: invitees?.length,

@@ -40,8 +40,12 @@ class HomeWidget extends StatelessWidget {
       ),
       floatingActionButton: IconButton(
           onPressed: () async {
-            getIt<EventRepository>().createItem(EventsCompanion(
-              name: const Value('Louie'),
+            final eventRepo = getIt<EventRepository>();
+            final inviteeRepo = getIt<InviteeRepository>();
+            // await eventRepo.deleteAllItems();
+            // await inviteeRepo.deleteAllItems();
+            final itemId = await eventRepo.createItem(EventsCompanion(
+              name: const Value('First Appointment'),
               happenedAt: Value(
                 DateTime.now()
                   ..add(
@@ -49,7 +53,12 @@ class HomeWidget extends StatelessWidget {
                   ),
               ),
             ));
-            // getIt<EventRepository>().deleteAllItems();
+            final inviteeId = await inviteeRepo.createItem(InviteesCompanion(
+              name: const Value('Tom'),
+              event: Value(itemId),
+              phoneNumber: const Value('91466915'),
+            ));
+            print('eventId: $itemId, inviteeId: $inviteeId');
           },
           icon: const Icon(
             Icons.add,

@@ -29,12 +29,14 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     String? contactString;
     if (contactName != null && contactNumber != null) {
-      contactString = '👤: $contactName, 📞: $contactNumber';
+      contactString = '👤$contactName, 📞$contactNumber';
     } else if (contactName != null) {
-      contactString = '👤: $contactName';
+      contactString = '👤$contactName';
     } else if (contactNumber != null) {
-      contactString = '📞: $contactNumber';
+      contactString = '📞$contactNumber';
     }
+
+    final numberOfInvitees = invitees?.length.toString() ?? '?';
 
     return Padding(
       padding: const EdgeInsets.all(2.0),
@@ -52,7 +54,7 @@ class EventCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     BodyMediumText(
-                      '${DateFormat('dd/MM, hh:mm aa').format(event.happenedAt)} - ${event.name} - ${invitees?.length}',
+                      '${DateFormat('dd/MM, HH:MM').format(event.happenedAt)} , $contactString',
                       textAlign: TextAlign.left,
                     ),
                     const SizedBox.square(dimension: 8),
@@ -62,8 +64,11 @@ class EventCard extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (contactString != null)
-                              BodyMediumText(contactString),
+                            BodyMediumText('${event.name} x $numberOfInvitees'),
+                            if (event.remark != null)
+                            BodyMediumText('${event.remark}'),
+                            // if (contactString != null)
+                            //   BodyMediumText(contactString),
 ],
                         ),
                         // FIXME: remove this spacer

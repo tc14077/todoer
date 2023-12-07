@@ -71,8 +71,7 @@ class HomeWidget extends StatelessWidget {
               EventsLoadInProgress() => const Center(
                   child: CircularProgressIndicator(),
                 ),
-              EventsLoadSuccess(eventDisplayItemMap: var itemMap) =>
-                Column(
+              EventsLoadSuccess(eventDisplayItemMap: var itemMap) => Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(

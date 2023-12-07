@@ -3,8 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 
 import '../../data/database/app_database.dart';
-import 'invitee_indicator.dart';
-
 /// Displays the event item on a Card together with DateTime information
 ///
 /// This widget's height is based on the [animation] parameter, it
@@ -54,7 +52,7 @@ class EventCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     BodyMediumText(
-                      DateFormat('dd/MM, hh:mm aa').format(event.happenedAt),
+                      '${DateFormat('dd/MM, hh:mm aa').format(event.happenedAt)} - ${event.name} - ${invitees?.length}',
                       textAlign: TextAlign.left,
                     ),
                     const SizedBox.square(dimension: 8),
@@ -64,15 +62,12 @@ class EventCard extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            BodyMediumText(event.name),
                             if (contactString != null)
                               BodyMediumText(contactString),
-                          ],
+],
                         ),
+                        // FIXME: remove this spacer
                         const Spacer(),
-                        InviteeIndicator(
-                          numberOfInvitee: invitees?.length,
-                        ),
                       ],
                     ),
                   ],

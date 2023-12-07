@@ -484,6 +484,11 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _remarkMeta = const VerificationMeta('remark');
+  @override
+  late final GeneratedColumn<String> remark = GeneratedColumn<String>(
+      'remark', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _happenedAtMeta =
       const VerificationMeta('happenedAt');
   @override
@@ -491,7 +496,8 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
       'happened_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, createdAt, name, happenedAt];
+  List<GeneratedColumn> get $columns =>
+      [id, createdAt, name, remark, happenedAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -514,6 +520,10 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('remark')) {
+      context.handle(_remarkMeta,
+          remark.isAcceptableOrUnknown(data['remark']!, _remarkMeta));
     }
     if (data.containsKey('happened_at')) {
       context.handle(
@@ -538,6 +548,8 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      remark: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}remark']),
       happenedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}happened_at'])!,
     );
@@ -553,11 +565,13 @@ class Event extends DataClass implements Insertable<Event> {
   final int id;
   final DateTime createdAt;
   final String name;
+  final String? remark;
   final DateTime happenedAt;
   const Event(
       {required this.id,
       required this.createdAt,
       required this.name,
+      this.remark,
       required this.happenedAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -565,6 +579,9 @@ class Event extends DataClass implements Insertable<Event> {
     map['id'] = Variable<int>(id);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['name'] = Variable<String>(name);
+    if (!nullToAbsent || remark != null) {
+      map['remark'] = Variable<String>(remark);
+    }
     map['happened_at'] = Variable<DateTime>(happenedAt);
     return map;
   }
@@ -574,6 +591,8 @@ class Event extends DataClass implements Insertable<Event> {
       id: Value(id),
       createdAt: Value(createdAt),
       name: Value(name),
+      remark:
+          remark == null && nullToAbsent ? const Value.absent() : Value(remark),
       happenedAt: Value(happenedAt),
     );
   }
@@ -585,6 +604,7 @@ class Event extends DataClass implements Insertable<Event> {
       id: serializer.fromJson<int>(json['id']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       name: serializer.fromJson<String>(json['name']),
+      remark: serializer.fromJson<String?>(json['remark']),
       happenedAt: serializer.fromJson<DateTime>(json['happenedAt']),
     );
   }
@@ -595,16 +615,22 @@ class Event extends DataClass implements Insertable<Event> {
       'id': serializer.toJson<int>(id),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'name': serializer.toJson<String>(name),
+      'remark': serializer.toJson<String?>(remark),
       'happenedAt': serializer.toJson<DateTime>(happenedAt),
     };
   }
 
   Event copyWith(
-          {int? id, DateTime? createdAt, String? name, DateTime? happenedAt}) =>
+          {int? id,
+          DateTime? createdAt,
+          String? name,
+          Value<String?> remark = const Value.absent(),
+          DateTime? happenedAt}) =>
       Event(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         name: name ?? this.name,
+        remark: remark.present ? remark.value : this.remark,
         happenedAt: happenedAt ?? this.happenedAt,
       );
   @override
@@ -613,13 +639,14 @@ class Event extends DataClass implements Insertable<Event> {
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('name: $name, ')
+          ..write('remark: $remark, ')
           ..write('happenedAt: $happenedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, createdAt, name, happenedAt);
+  int get hashCode => Object.hash(id, createdAt, name, remark, happenedAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -627,6 +654,7 @@ class Event extends DataClass implements Insertable<Event> {
           other.id == this.id &&
           other.createdAt == this.createdAt &&
           other.name == this.name &&
+          other.remark == this.remark &&
           other.happenedAt == this.happenedAt);
 }
 
@@ -634,17 +662,20 @@ class EventsCompanion extends UpdateCompanion<Event> {
   final Value<int> id;
   final Value<DateTime> createdAt;
   final Value<String> name;
+  final Value<String?> remark;
   final Value<DateTime> happenedAt;
   const EventsCompanion({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.name = const Value.absent(),
+    this.remark = const Value.absent(),
     this.happenedAt = const Value.absent(),
   });
   EventsCompanion.insert({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     required String name,
+    this.remark = const Value.absent(),
     required DateTime happenedAt,
   })  : name = Value(name),
         happenedAt = Value(happenedAt);
@@ -652,12 +683,14 @@ class EventsCompanion extends UpdateCompanion<Event> {
     Expression<int>? id,
     Expression<DateTime>? createdAt,
     Expression<String>? name,
+    Expression<String>? remark,
     Expression<DateTime>? happenedAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (createdAt != null) 'created_at': createdAt,
       if (name != null) 'name': name,
+      if (remark != null) 'remark': remark,
       if (happenedAt != null) 'happened_at': happenedAt,
     });
   }
@@ -666,11 +699,13 @@ class EventsCompanion extends UpdateCompanion<Event> {
       {Value<int>? id,
       Value<DateTime>? createdAt,
       Value<String>? name,
+      Value<String?>? remark,
       Value<DateTime>? happenedAt}) {
     return EventsCompanion(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
       name: name ?? this.name,
+      remark: remark ?? this.remark,
       happenedAt: happenedAt ?? this.happenedAt,
     );
   }
@@ -687,6 +722,9 @@ class EventsCompanion extends UpdateCompanion<Event> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (remark.present) {
+      map['remark'] = Variable<String>(remark.value);
+    }
     if (happenedAt.present) {
       map['happened_at'] = Variable<DateTime>(happenedAt.value);
     }
@@ -699,6 +737,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('name: $name, ')
+          ..write('remark: $remark, ')
           ..write('happenedAt: $happenedAt')
           ..write(')'))
         .toString();

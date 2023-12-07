@@ -21,7 +21,7 @@ class AppDatabase extends _$AppDatabase {
   // you should bump this number whenever you change or add a table definition.
   // Migrations are covered later in the documentation.
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   // see more details on
   // https://drift.simonbinder.eu/docs/advanced-features/migrations/
@@ -46,6 +46,9 @@ class AppDatabase extends _$AppDatabase {
           await m.addColumn(users, users.createdAt);
           await m.addColumn(userSettings, userSettings.createdAt);
           await m.addColumn(invitees, invitees.phoneNumber);
+        }
+        if (from < 5) {
+          await m.addColumn(events, events.remark);
         }
       },
       beforeOpen: (details) async {

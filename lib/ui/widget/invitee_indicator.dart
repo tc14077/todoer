@@ -27,7 +27,7 @@ class InviteeIndicator extends StatelessWidget {
               size: 10,
             )
           : SizedBox.square(
-            child: LabelSmallText(
+            child: LabelLargeText(
               numberOfInvitee.toString(),
               textAlign: TextAlign.center,
             ),

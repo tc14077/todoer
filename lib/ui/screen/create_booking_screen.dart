@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoer/ui/widget/create_booking_widget.dart';
 
 import '../system/themed_text.dart';
 
@@ -9,16 +10,11 @@ class CreateBookingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Theme setting'),
+        title: const Text('Create Booking'),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const TitleLargeText('CreateBooking'),
-          ],
-        ),
+        child: CreateBookingWidget(),
       ),
     );
   }

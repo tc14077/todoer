@@ -1,12 +1,15 @@
+import 'package:beamer/beamer.dart';
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoer/bloc/event_listing/event_listing_bloc.dart';
 import 'package:todoer/main.dart';
+import 'package:todoer/navigation/path/app_path.dart';
 import 'package:todoer/repositories/event_repository.dart';
 import 'package:todoer/repositories/invitee_repository.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 import 'package:todoer/ui/widget/animated_full_event_list.dart';
+import 'package:todoer/ui/widget/create_booking_widget.dart';
 
 import '../../data/database/app_database.dart';
 
@@ -37,33 +40,46 @@ class HomeWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const TitleLargeText('Plannable Booking'),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                context.beamToNamed(AppPath.createBooking);
+                // showDialog(
+                //   context: context,
+                //   builder: (context) {
+                //     return CreateBookingDialog(
+                //       // no need to be localized because it is for developers only
+                //       titleText: 'New Booking',
+                //       onSubmit: (passwordHash) {},
+                //     );
+                //   },
+                // );
+                // final eventRepo = getIt<EventRepository>();
+                // final inviteeRepo = getIt<InviteeRepository>();
+                // // await eventRepo.deleteAllItems();
+                // // await inviteeRepo.deleteAllItems();
+                // final itemId = await eventRepo.createItem(EventsCompanion(
+                //   name: const Value('隨身本'),
+                //   remark: const Value('2個，黃色封面'),
+                //   happenedAt: Value(
+                //     DateTime.now()
+                //       ..add(
+                //         const Duration(days: 1, hours: 1),
+                //       ),
+                //   ),
+                // ));
+                // final inviteeId = await inviteeRepo.createItem(InviteesCompanion(
+                //   name: const Value('Tom'),
+                //   event: Value(itemId),
+                //   phoneNumber: const Value('91466915'),
+                // ));
+                // print('eventId: $itemId, inviteeId: $inviteeId');
+              },
+              icon: const Icon(
+                Icons.add,
+              )),
+        ],
       ),
-      floatingActionButton: IconButton(
-          onPressed: () async {
-            final eventRepo = getIt<EventRepository>();
-            final inviteeRepo = getIt<InviteeRepository>();
-            // await eventRepo.deleteAllItems();
-            // await inviteeRepo.deleteAllItems();
-            final itemId = await eventRepo.createItem(EventsCompanion(
-              name: const Value('隨身本'),
-              remark: const Value('2個，黃色封面'),
-              happenedAt: Value(
-                DateTime.now()
-                  ..add(
-                    const Duration(days: 1, hours: 1),
-                  ),
-              ),
-            ));
-            final inviteeId = await inviteeRepo.createItem(InviteesCompanion(
-              name: const Value('Tom'),
-              event: Value(itemId),
-              phoneNumber: const Value('91466915'),
-            ));
-            print('eventId: $itemId, inviteeId: $inviteeId');
-          },
-          icon: const Icon(
-            Icons.add,
-          )),
       body: SizedBox(
         width: double.infinity,
         child: BlocBuilder<EventListingBloc, EventListingState>(

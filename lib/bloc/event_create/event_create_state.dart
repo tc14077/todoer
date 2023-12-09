@@ -12,8 +12,8 @@ final class EventCreateInitializeInProgress extends EventCreateState {}
 final class EventDataUpdateSuccess extends EventCreateState {
   final String? name;
   final String? remark;
-  final DateTime? selectedDate;
-  final TimeOfDay? selectedTime;
+  final DateTime selectedDate;
+  final TimeOfDay selectedTime;
   final List<InviteePair> inviteePairList;
 
   const EventDataUpdateSuccess({

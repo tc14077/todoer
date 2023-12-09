@@ -14,7 +14,9 @@ class CreateBookingScreen extends StatelessWidget {
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: CreateBookingWidget(),
+        child: CreateBookingWidget(
+          defaultBookingTime: DateTime.now(),
+        ),
       ),
     );
   }

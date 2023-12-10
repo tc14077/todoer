@@ -40,7 +40,7 @@ class DateTimePickerField extends StatelessWidget {
                 initialDate: pickedDate,
                 firstDate: today.subtract(const Duration(days: 1)),
                 lastDate: today.add(const Duration(days: 365)),
-                currentDate: today,
+                currentDate: pickedDate,
                 initialEntryMode: DatePickerEntryMode.calendarOnly,
                 initialDatePickerMode: DatePickerMode.day,
               );

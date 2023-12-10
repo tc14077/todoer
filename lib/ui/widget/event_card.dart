@@ -59,7 +59,7 @@ class EventCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         BodyMediumText(
-                          '${DateFormat('dd/MM, HH:mm').format(event.happenedAt)} , $contactString',
+                          '${DateFormat('dd/MM, HH:mm').format(event.happenedAt)}, $contactString',
                           textAlign: TextAlign.left,
                         ),
                         const SizedBox.square(dimension: 8),
@@ -69,8 +69,7 @@ class EventCard extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                BodyMediumText(
-                                    '${event.name} x $numberOfInvitees'),
+                                BodyMediumText(event.name),
                                 if (event.remark != null)
                                   BodyMediumText('${event.remark}'),
                                 // if (contactString != null)

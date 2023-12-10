@@ -19,6 +19,7 @@ class BookingDetailWidget extends StatefulWidget {
     this.bookingName,
     this.remark,
     this.errors,
+    this.inviteeFormErrors,
   });
   final String? bookingName;
   final String? remark;
@@ -28,6 +29,7 @@ class BookingDetailWidget extends StatefulWidget {
   final TimeOfDay selectedTime;
   final List<InviteePair> inviteePairList;
   final Set<EventFormError>? errors;
+  final Map<String, Set<EventFormError>>? inviteeFormErrors;
 
   @override
   State<BookingDetailWidget> createState() => _BookingDetailWidgetState();
@@ -57,6 +59,7 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
           key: ValueKey(pair.hashId),
           inviteeName: pair.record.inviteeName ?? '',
           inviteePhoneNumber: pair.record.inviteePhoneNumber ?? '',
+          eventFormError: widget.inviteeFormErrors?[pair.hashId],
           onInviteeInfoUpdate: (name, phoneNumber) {
             context.read<EventCreateBloc>().add(InviteeDataUpdateRequested(
                   hashId: pair.hashId,

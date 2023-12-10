@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoer/enum/event_form_error.dart';
 
 import '../../system/themed_text.dart';
 
@@ -7,11 +8,13 @@ class InviteeForm extends StatefulWidget {
     super.key,
     this.inviteeName,
     this.inviteePhoneNumber,
+    this.eventFormError,
     required this.onInviteeInfoUpdate,
   });
 
   final String? inviteeName;
   final String? inviteePhoneNumber;
+  final Set<EventFormError>? eventFormError;
 
   final Function(String inviteeName, String phoneNumber) onInviteeInfoUpdate;
 
@@ -43,8 +46,13 @@ class _InviteeFormState extends State<InviteeForm> {
         TextField(
           key: _nameFieldKey,
           controller: _inviteeNameController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Invitee Name',
+            errorText: widget.eventFormError
+                        ?.contains(EventFormError.defaultInviteeNameNotFound) ==
+                    true
+                ? 'This field is required'
+                : null,
           ),
           onChanged: (value) {
             widget.onInviteeInfoUpdate(

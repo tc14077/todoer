@@ -75,6 +75,7 @@ class CreateBookingScreen extends StatelessWidget {
                     selectedTime: state.selectedTime,
                     inviteePairList: state.inviteePairList,
                     errors: state.errors,
+                    inviteeFormErrors: state.inviteeFormErrors,
                   );
                 }
                 return Container();

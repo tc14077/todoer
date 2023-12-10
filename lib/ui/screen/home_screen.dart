@@ -9,7 +9,7 @@ import 'package:todoer/repositories/event_repository.dart';
 import 'package:todoer/repositories/invitee_repository.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 import 'package:todoer/ui/widget/animated_full_event_list.dart';
-import 'package:todoer/ui/widget/create_booking_widget.dart';
+import 'package:todoer/ui/widget/booking_detail/booking_detail_widget.dart';
 
 import '../../data/database/app_database.dart';
 

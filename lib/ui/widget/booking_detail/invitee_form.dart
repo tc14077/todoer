@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../system/themed_text.dart';
+import '../../system/themed_text.dart';
 
 class InviteeForm extends StatelessWidget {
   InviteeForm({

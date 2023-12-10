@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoer/bloc/event_create/event_create_bloc.dart';
-import 'package:todoer/ui/widget/create_booking_widget.dart';
+import 'package:todoer/ui/widget/booking_detail_widget.dart';
 
 import '../system/themed_text.dart';
 
@@ -28,7 +28,7 @@ class CreateBookingScreen extends StatelessWidget {
             child: BlocBuilder<EventCreateBloc, EventCreateState>(
               builder: (context, state) {
                 if (state is EventDataUpdateSuccess) {
-                  return BookingWidget(
+                  return BookingDetailWidget(
                     defaultBookingTime: DateTime.now(),
                     name: state.name,
                     remark: state.remark,

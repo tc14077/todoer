@@ -4,8 +4,8 @@ import 'package:todoer/ui/system/themed_text.dart';
 
 import 'invitee_form.dart';
 
-class BookingWidget extends StatelessWidget {
-  BookingWidget({
+class BookingDetailWidget extends StatelessWidget {
+  BookingDetailWidget({
     super.key,
     required this.defaultBookingTime,
     required this.selectedDate,

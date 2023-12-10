@@ -28,6 +28,10 @@ abstract class BasePersistRepository<T extends BaseTable, R> {
     return dao.insertSingle(entry);
   }
 
+  Future<int> deleteItemById(int id){
+    return dao.deleteById(id);
+  }
+
   Future<int> deleteAllItems(){
     return dao.deleteAll();
   }

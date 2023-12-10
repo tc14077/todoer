@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:todoer/data/display_items/displayable.dart';
+import 'package:todoer/ui/system/themed_text.dart';
 
-import '../../data/display_items/displayable.dart';
 import 'event_card.dart';
 import 'model/list_model.dart';
 
-class AnimatedEventList extends StatelessWidget {
+class AnimatedFullEventList extends StatelessWidget {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  final List<EventDisplayItem> events;
-  late final ListModel<EventDisplayItem> _list;
+  final Map<DateDisplayItem, List<EventDisplayItem>> eventMap;
+  late final ListModel<Displayable> _list;
 
-  AnimatedEventList({
+  AnimatedFullEventList({
     super.key,
-    required this.events,
+    required this.eventMap,
   }) {
-    _list = ListModel<EventDisplayItem>(
+    final List<Displayable> displayableItems = [];
+    eventMap.forEach((key, value) {
+      displayableItems.add(key);
+      displayableItems.addAll(value);
+    });
+    _list = ListModel<Displayable>(
       listKey: _listKey,
       removedItemBuilder: _buildRemovedItem,
-      initialItems: events,
+      initialItems: displayableItems,
     );
   }
 
@@ -27,12 +34,18 @@ class AnimatedEventList extends StatelessWidget {
     Animation<double> animation,
   ) {
     final item =  _list[index];
-    return EventCard(
+    return switch(item){
+      EventDisplayItem(event: var event, invitees: var invitees) => EventCard(
       animation: animation,
-      event: item.event,
-      invitees: item.invitees,
+      event: event,
+      invitees: invitees,
+      contactName: invitees?.firstOrNull?.name,
+      contactNumber: invitees?.firstOrNull?.phoneNumber,
       onTap: () {},
-    );
+      // No gesture detector here: we don't want removed items to be interactive.
+    ),
+    DateDisplayItem(dateTime: var dateTime) => TitleMediumText(DateFormat('dd/MM/yyyy').format(dateTime))
+    };
   }
 
   @override
@@ -52,15 +65,18 @@ class AnimatedEventList extends StatelessWidget {
   /// The widget will be used by the [AnimatedListState.removeItem] method's
   /// [AnimatedRemovedItemBuilder] parameter.
   Widget _buildRemovedItem(
-    EventDisplayItem item,
+    Displayable item,
     BuildContext context,
     Animation<double> animation,
   ) {
-    return EventCard(
+    return switch(item){
+      EventDisplayItem(event: var event, invitees: var invitees) => EventCard(
       animation: animation,
-      event: item.event,
-      invitees: item.invitees,
+      event: event,
+      invitees: invitees,
       // No gesture detector here: we don't want removed items to be interactive.
-    );
+    ),
+    DateDisplayItem(dateTime: var dateTime) => BodyMediumText(dateTime.toString())
+    };
   }
 }

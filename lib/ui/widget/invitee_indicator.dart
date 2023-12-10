@@ -21,13 +21,13 @@ class InviteeIndicator extends StatelessWidget {
         loopAnimation: false,
         curve: Curves.fastOutSlowIn,
       ),
-      badgeContent: numberOfInvitee == null
+      badgeContent: numberOfInvitee == null || numberOfInvitee == 0
           ? const Icon(
               Icons.question_mark,
               size: 10,
             )
           : SizedBox.square(
-            child: LabelSmallText(
+            child: LabelLargeText(
               numberOfInvitee.toString(),
               textAlign: TextAlign.center,
             ),

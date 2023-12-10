@@ -63,6 +63,11 @@ class BaseDao<K extends BaseTable, R> {
     return query.get();
   }
 
+  Stream<List<R>> findAllAsStream() {
+    final query = appDatabase.select(table);
+    return query.watch();
+  }
+
   Stream<R?> findByIdAsStream(int id) {
     final query = table.findById(id);
     return query.watchSingle();

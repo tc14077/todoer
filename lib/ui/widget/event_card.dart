@@ -3,8 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 
 import '../../data/database/app_database.dart';
-import 'invitee_indicator.dart';
-
 /// Displays the event item on a Card together with DateTime information
 ///
 /// This widget's height is based on the [animation] parameter, it
@@ -16,15 +14,28 @@ class EventCard extends StatelessWidget {
     required this.animation,
     required this.event,
     this.invitees,
+    this.contactName,
+    this.contactNumber,
   });
 
   final Animation<double> animation;
   final VoidCallback? onTap;
   final Event event;
   final List<Invitee>? invitees;
+  final String? contactName;
+  final String? contactNumber;
 
   @override
   Widget build(BuildContext context) {
+    String? contactString;
+    if (contactName != null && contactNumber != null) {
+      contactString = '👤: $contactName, 📞: $contactNumber';
+    } else if (contactName != null) {
+      contactString = '👤: $contactName';
+    } else if (contactNumber != null) {
+      contactString = '📞: $contactNumber';
+    }
+
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: SizeTransition(
@@ -41,18 +52,22 @@ class EventCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     BodyMediumText(
-                      DateFormat('hh:mm').format(event.happenedAt),
+                      '${DateFormat('dd/MM, hh:mm aa').format(event.happenedAt)} - ${event.name} - ${invitees?.length}',
                       textAlign: TextAlign.left,
                     ),
                     const SizedBox.square(dimension: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        BodyMediumText(event.name),
-                        const Spacer(),
-                        InviteeIndicator(
-                          numberOfInvitee: invitees?.length,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (contactString != null)
+                              BodyMediumText(contactString),
+],
                         ),
+                        // FIXME: remove this spacer
+                        const Spacer(),
                       ],
                     ),
                   ],

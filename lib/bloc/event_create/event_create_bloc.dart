@@ -66,13 +66,13 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
     selectedTime = event.selectedTime ?? selectedTime;
     name = event.name ?? name;
     remark = event.remark ?? remark;
-    emit(EventDataUpdateSuccess(
-      name: name,
-      remark: remark,
-      selectedDate: selectedDate,
-      selectedTime: selectedTime,
-      inviteePairList: inviteeRecordList,
-    ));
+    // emit(EventDataUpdateSuccess(
+    //   name: name,
+    //   remark: remark,
+    //   selectedDate: selectedDate,
+    //   selectedTime: selectedTime,
+    //   inviteePairList: inviteeRecordList,
+    // ));
   }
 
   void _onInviteeDataUpdateRequested(

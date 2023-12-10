@@ -53,6 +53,6 @@ final class InviteeDataUpdateRequested extends EventCreateEvent {
       ];
 }
 
-final class InviteeCreateRequested extends EventCreateEvent {
-  const InviteeCreateRequested();
+final class EventCreateRequested extends EventCreateEvent {
+  const EventCreateRequested();
 }

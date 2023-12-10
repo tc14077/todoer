@@ -16,3 +16,12 @@ class _TableUpdated extends EventListingEvent {
   @override
   List<Object?> get props => [events];
 }
+
+class EventDeleteRequested extends EventListingEvent {
+  final int eventId;
+
+  EventDeleteRequested({required this.eventId});
+
+  @override
+  List<Object?> get props => [eventId];
+}

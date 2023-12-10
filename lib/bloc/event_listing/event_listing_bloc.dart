@@ -23,6 +23,7 @@ class EventListingBloc extends Bloc<EventListingEvent, EventListingState> {
   }) : super(EventsLoadInProgress()) {
     on<_InitialLoadRequested>(_onInitialLoadRequested);
     on<_TableUpdated>(_onTableUpdated);
+    on<EventDeleteRequested>(_onEventDeleteRequested);
     add(_InitialLoadRequested());
     _eventTableSubscription =
         eventRepository.getAllItemsAsStream().listen((events) {
@@ -73,5 +74,12 @@ class EventListingBloc extends Bloc<EventListingEvent, EventListingState> {
   Future<void> close() {
     _eventTableSubscription.cancel();
     return super.close();
+  }
+
+  void _onEventDeleteRequested(
+    EventDeleteRequested event,
+    Emitter<EventListingState> emit,
+  ) async {
+    await eventRepository.deleteItemById(event.eventId);
   }
 }

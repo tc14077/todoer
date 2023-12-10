@@ -45,7 +45,8 @@ class HomeWidget extends StatelessWidget {
             // await eventRepo.deleteAllItems();
             // await inviteeRepo.deleteAllItems();
             final itemId = await eventRepo.createItem(EventsCompanion(
-              name: const Value('First Appointment'),
+              name: const Value('隨身本'),
+              remark: const Value('2個，黃色封面'),
               happenedAt: Value(
                 DateTime.now()
                   ..add(

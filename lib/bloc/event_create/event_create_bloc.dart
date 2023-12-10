@@ -21,6 +21,7 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
 
   EventCreateBloc() : super(EventCreateInitializeInProgress()) {
     on<InitializeRequested>(_onInitializeRequested);
+    on<EventDataUpdateRequested>(_onEventDataUpdateRequested);
 
     add(InitializeRequested());
   }
@@ -34,6 +35,23 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
     selectedTime = TimeOfDay.fromDateTime(now);
     final initialInviteeUUID = const Uuid().v4();
     inviteeFormRecordMap[initialInviteeUUID] = const InviteeFormRecord();
+    emit(EventDataUpdateSuccess(
+      name: name,
+      remark: remark,
+      selectedDate: selectedDate,
+      selectedTime: selectedTime,
+      inviteePairList: inviteeRecordList,
+    ));
+  }
+
+  void _onEventDataUpdateRequested(
+    EventDataUpdateRequested event,
+    Emitter<EventCreateState> emit,
+  ) {
+    selectedDate = event.selectedDate ?? selectedDate;
+    selectedTime = event.selectedTime ?? selectedTime;
+    name = event.name ?? name;
+    remark = event.remark ?? remark;
     emit(EventDataUpdateSuccess(
       name: name,
       remark: remark,

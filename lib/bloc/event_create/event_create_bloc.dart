@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +24,7 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
   EventCreateBloc() : super(EventCreateInitializeInProgress()) {
     on<InitializeRequested>(_onInitializeRequested);
     on<EventDataUpdateRequested>(_onEventDataUpdateRequested);
+    on<InviteeDataUpdateRequested>(_onInviteeDataUpdateRequested);
 
     add(InitializeRequested());
   }
@@ -52,6 +55,23 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
     selectedTime = event.selectedTime ?? selectedTime;
     name = event.name ?? name;
     remark = event.remark ?? remark;
+    emit(EventDataUpdateSuccess(
+      name: name,
+      remark: remark,
+      selectedDate: selectedDate,
+      selectedTime: selectedTime,
+      inviteePairList: inviteeRecordList,
+    ));
+  }
+
+  void _onInviteeDataUpdateRequested(
+    InviteeDataUpdateRequested event,
+    Emitter<EventCreateState> emit,
+  ) {
+    final newRecord = inviteeFormRecordMap[event.hashId]?.copyWith(
+        inviteeName: event.name, inviteePhoneNumber: event.phoneNumber);
+    if (newRecord != null) inviteeFormRecordMap[event.hashId] = newRecord;
+    //TODO fix hashId not found case
     emit(EventDataUpdateSuccess(
       name: name,
       remark: remark,

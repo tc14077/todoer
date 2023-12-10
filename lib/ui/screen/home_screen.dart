@@ -1,10 +1,12 @@
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:todoer/data/models/invitee.dart';
+import 'package:todoer/main.dart';
+import 'package:todoer/repositories/event_repository.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 import 'package:todoer/ui/widget/animated_event_list.dart';
 
-import '../../data/models/event.dart';
+import '../../data/database/app_database.dart';
 import '../widget/table_calendar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,73 +17,18 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-final mocking = [
-  Event(
-    'Booking 1',
-    DateTime(2023, 11, 1, 12, 00),
-    invitees: [Invitee('Tom')],
-  ),
-  Event(
-    'Booking 2',
-    DateTime(2023, 11, 1, 12, 00),
-    invitees: [Invitee('Tom'), Invitee('Louie')],
-  ),
-  Event(
-    'Booking 3',
-    DateTime(2023, 11, 2, 13, 00),
-  ),
-  Event(
-    'Booking 1',
-    DateTime(2023, 11, 1, 12, 00),
-  ),
-  Event(
-    'Booking 2',
-    DateTime(2023, 11, 1, 12, 00),
-  ),
-  Event(
-    'Booking 3',
-    DateTime(2023, 11, 2, 13, 00),
-  ),
-  Event(
-    'Booking 1',
-    DateTime(2023, 11, 1, 12, 00),
-  ),
-  Event(
-    'Booking 2',
-    DateTime(2023, 11, 1, 12, 00),
-  ),
-  Event(
-    'Booking 3',
-    DateTime(2023, 11, 2, 13, 00),
-  ),
-  Event(
-    'Booking 1',
-    DateTime(2023, 11, 1, 12, 00),
-  ),
-  Event(
-    'Booking 2',
-    DateTime(2023, 11, 1, 12, 00),
-  ),
-  Event(
-    'Booking 3',
-    DateTime(2023, 11, 2, 13, 00),
-  ),
-  Event(
-    'Booking 1',
-    DateTime(2023, 11, 1, 12, 00),
-  ),
-  Event(
-    'Booking 2',
-    DateTime(2023, 11, 1, 12, 00),
-  ),
-  Event(
-    'Booking 3',
-    DateTime(2023, 11, 2, 13, 00),
-  ),
-];
-
 class _HomeScreenState extends State<HomeScreen> {
   final _selectedDay = DateTime.now();
+  List<Event> events = [];
+
+  @override
+  void initState() {
+    getIt<EventRepository>().getAllItems().then((value) {
+      events = value;
+      setState(() {});
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +37,22 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const TitleLargeText('Plannable Booking'),
       ),
+      floatingActionButton: IconButton(
+          onPressed: () async {
+            getIt<EventRepository>().createItem(EventsCompanion(
+              name: const Value('Louie'),
+              happenedAt: Value(
+                DateTime.now()
+                  ..add(
+                    const Duration(days: 1, hours: 1),
+                  ),
+              ),
+            ));
+            // getIt<EventRepository>().deleteAllItems();
+          },
+          icon: const Icon(
+            Icons.add,
+          )),
       body: Container(
         width: double.infinity,
         child: Column(
@@ -137,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: AnimatedEventList(events: mocking),
+                child: AnimatedEventList(events: events),
               ),
             ),
           ],

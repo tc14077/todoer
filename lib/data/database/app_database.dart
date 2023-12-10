@@ -8,10 +8,12 @@ import 'package:todoer/data/models/user_settings.dart';
 import 'package:todoer/data/models/users.dart';
 
 import '../../enum/app_theme_options.dart';
+import '../models/events.dart';
+import '../models/invitees.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [UserSettings, Users])
+@DriftDatabase(tables: [UserSettings, Users, Events, Invitees])
 class AppDatabase extends _$AppDatabase {
   // we tell the database where to store the data with this constructor
   AppDatabase() : super(_openConnection());
@@ -19,7 +21,7 @@ class AppDatabase extends _$AppDatabase {
   // you should bump this number whenever you change or add a table definition.
   // Migrations are covered later in the documentation.
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 4;
 
   // see more details on
   // https://drift.simonbinder.eu/docs/advanced-features/migrations/
@@ -30,11 +32,38 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
+        // disable foreign_keys before migrations
+        await customStatement('PRAGMA foreign_keys = OFF');
+
         if (from < 2) {
           await m.addColumn(users, users.name);
         }
+        if (from < 3) {
+          await m.createTable(events);
+          await m.createTable(invitees);
+        }
+        if (from < 4) {
+          await m.addColumn(users, users.createdAt);
+          await m.addColumn(userSettings, userSettings.createdAt);
+          await m.addColumn(invitees, invitees.phoneNumber);
+        }
+      },
+      beforeOpen: (details) async {
+        await customStatement('PRAGMA foreign_keys = ON');
       },
     );
+  }
+
+  Future<Event> getEventById({required int eventId}) {
+    return (select(events)..where((t) => t.id.equals(eventId))).getSingle();
+  }
+
+  Future<List<Event>> getAllEvents() {
+    final query = select(events);
+    query.orderBy([
+      (t) => OrderingTerm.asc(t.happenedAt),
+    ]);
+    return query.get();
   }
 }
 

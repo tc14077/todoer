@@ -54,7 +54,7 @@ class EventCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     BodyMediumText(
-                      '${DateFormat('dd/MM, HH:MM').format(event.happenedAt)} , $contactString',
+                      '${DateFormat('dd/MM, HH:mm').format(event.happenedAt)} , $contactString',
                       textAlign: TextAlign.left,
                     ),
                     const SizedBox.square(dimension: 8),

@@ -14,6 +14,7 @@ class BookingDetailWidget extends StatefulWidget {
     required this.defaultBookingTime,
     required this.selectedDate,
     required this.selectedTime,
+    required this.inviteePairList,
     this.bookingName,
     this.remark,
   });
@@ -23,6 +24,7 @@ class BookingDetailWidget extends StatefulWidget {
   final DateTime defaultBookingTime;
   final DateTime selectedDate;
   final TimeOfDay selectedTime;
+  final List<InviteePair> inviteePairList;
 
   @override
   State<BookingDetailWidget> createState() => _BookingDetailWidgetState();
@@ -90,8 +92,8 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
           dimension: 12,
         ),
         InviteeForm(
-          inviteeName: 'Tom',
-          inviteePhoneNumber: '91466915',
+          inviteeName: widget.inviteePairList.firstOrNull?.record.inviteeName ?? '',
+          inviteePhoneNumber: widget.inviteePairList.firstOrNull?.record.inviteePhoneNumber ?? '',
           onInviteeInfoUpdate: (name, phoneNumber) {
             print('$name, $phoneNumber');
           },

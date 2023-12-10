@@ -36,6 +36,7 @@ class CreateBookingScreen extends StatelessWidget {
                     remark: state.remark,
                     selectedDate: state.selectedDate,
                     selectedTime: state.selectedTime,
+                    inviteePairList: state.inviteePairList,
                   );
                 }
                 return Container();

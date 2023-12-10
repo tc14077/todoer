@@ -50,6 +50,18 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final inviteeFormList = widget.inviteePairList.map((pair) => InviteeForm(
+          key: ValueKey(pair.hashId),
+          inviteeName: pair.record.inviteeName ?? '',
+          inviteePhoneNumber: pair.record.inviteePhoneNumber ?? '',
+          onInviteeInfoUpdate: (name, phoneNumber) {
+            context.read<EventCreateBloc>().add(InviteeDataUpdateRequested(
+                  hashId: pair.hashId,
+                  name: name,
+                  phoneNumber: phoneNumber,
+                ));
+          },
+        ));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -91,13 +103,7 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
         const SizedBox.square(
           dimension: 12,
         ),
-        InviteeForm(
-          inviteeName: widget.inviteePairList.firstOrNull?.record.inviteeName ?? '',
-          inviteePhoneNumber: widget.inviteePairList.firstOrNull?.record.inviteePhoneNumber ?? '',
-          onInviteeInfoUpdate: (name, phoneNumber) {
-            print('$name, $phoneNumber');
-          },
-        ),
+        ...inviteeFormList,
       ],
     );
   }

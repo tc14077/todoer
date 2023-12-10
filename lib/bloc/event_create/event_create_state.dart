@@ -50,6 +50,7 @@ final class EventCreateSuccess extends EventCreateState {}
 
 final class EventCreateFailure extends EventDataState {
   final Set<EventFormError> errors;
+  final Map<String, Set<EventFormError>> inviteeFormErrors;
 
   const EventCreateFailure({
     required super.name,
@@ -58,6 +59,7 @@ final class EventCreateFailure extends EventDataState {
     required super.selectedTime,
     required super.inviteePairList,
     required this.errors,
+    required this.inviteeFormErrors,
   });
 
   @override
@@ -68,5 +70,6 @@ final class EventCreateFailure extends EventDataState {
         selectedTime,
         inviteePairList,
         errors,
+        inviteeFormErrors,
       ];
 }

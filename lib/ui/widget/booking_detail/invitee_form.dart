@@ -2,19 +2,37 @@ import 'package:flutter/material.dart';
 
 import '../../system/themed_text.dart';
 
-class InviteeForm extends StatelessWidget {
-  InviteeForm({
+class InviteeForm extends StatefulWidget {
+  const InviteeForm({
     super.key,
-    String? inviteeName,
-    String? inviteePhoneNumber,
+    this.inviteeName,
+    this.inviteePhoneNumber,
     required this.onInviteeInfoUpdate,
-  })  : _inviteeNameController = TextEditingController(text: inviteeName),
-        _inviteePhoneNumberController =
-            TextEditingController(text: inviteePhoneNumber);
+  });
 
-  final TextEditingController _inviteeNameController;
-  final TextEditingController _inviteePhoneNumberController;
+  final String? inviteeName;
+  final String? inviteePhoneNumber;
+
   final Function(String inviteeName, String phoneNumber) onInviteeInfoUpdate;
+
+  @override
+  State<InviteeForm> createState() => _InviteeFormState();
+}
+
+class _InviteeFormState extends State<InviteeForm> {
+  late final TextEditingController _inviteeNameController;
+  late final TextEditingController _inviteePhoneNumberController;
+
+  final _nameFieldKey = UniqueKey();
+  final _phoneNumberKey = UniqueKey();
+
+  @override
+  void initState() {
+    _inviteeNameController = TextEditingController(text: widget.inviteeName);
+    _inviteePhoneNumberController =
+        TextEditingController(text: widget.inviteePhoneNumber);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +41,29 @@ class InviteeForm extends StatelessWidget {
       children: [
         const TitleLargeText('Invitee'),
         TextField(
+          key: _nameFieldKey,
           controller: _inviteeNameController,
           decoration: const InputDecoration(
             labelText: 'Invitee Name',
           ),
           onChanged: (value) {
-            onInviteeInfoUpdate(value, _inviteePhoneNumberController.text);
+            widget.onInviteeInfoUpdate(
+              value,
+              _inviteePhoneNumberController.text,
+            );
           },
         ),
         TextField(
+          key: _phoneNumberKey,
           controller: _inviteePhoneNumberController,
           decoration: const InputDecoration(
             labelText: 'Contact Number',
           ),
           onChanged: (value) {
-            onInviteeInfoUpdate(_inviteeNameController.text, value);
+            widget.onInviteeInfoUpdate(
+              _inviteeNameController.text,
+              value,
+            );
           },
         ),
       ],

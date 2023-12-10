@@ -102,20 +102,15 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
       minute: selectedTime.minute,
     );
 
-    final defaultInvitee = inviteeFormRecordMap.entries.firstOrNull;
+    final inviteeRecordValidateResult = _validateInviteeRecords()..removeWhere((key, value) => value.isEmpty);
 
     if (name == null ||
         name == '' ||
-        defaultInvitee == null ||
-        defaultInvitee.value.inviteeName == null ||
-        defaultInvitee.value.inviteeName == '') {
+        inviteeRecordValidateResult.isNotEmpty) {
       final errors = {
         if (name == null || name == '') EventFormError.nameNotFound,
-        if (defaultInvitee == null) EventFormError.defaultInviteeNotFound,
-        if (defaultInvitee?.value.inviteeName == null ||
-            defaultInvitee?.value.inviteeName == '')
-          EventFormError.defaultInviteeNameNotFound,
       };
+
       emit(EventCreateFailure(
         name: name,
         remark: remark,
@@ -123,6 +118,7 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
         selectedTime: selectedTime,
         inviteePairList: inviteeRecordList,
         errors: errors,
+        inviteeFormErrors: inviteeRecordValidateResult,
       ));
       return;
     }
@@ -141,5 +137,15 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
       ),
     ));
     emit(EventCreateSuccess());
+  }
+
+  Map<String, Set<EventFormError>> _validateInviteeRecords() {
+    return inviteeFormRecordMap.map((key, value) {
+      final errors = {
+        if (value.inviteeName == null || value.inviteeName == '')
+          EventFormError.defaultInviteeNameNotFound,
+      };
+      return MapEntry(key, errors);
+    });
   }
 }

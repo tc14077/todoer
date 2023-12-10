@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:todoer/bloc/event_create/event_create_bloc.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 
 import 'invitee_form.dart';
@@ -34,16 +36,22 @@ class BookingDetailWidget extends StatelessWidget {
           decoration: const InputDecoration(
             labelText: 'Booking Name',
           ),
+          onChanged: (value) => context.read<EventCreateBloc>().add(EventDataUpdateRequested(name: value)),
         ),
         TextField(
           controller: _eventRemarkController,
           decoration: const InputDecoration(
             labelText: 'Remark (Optional)',
           ),
+          onChanged: (value) => context.read<EventCreateBloc>().add(EventDataUpdateRequested(remark: value)),
         ),
         DateTimePickerField(
-          onDateUpdate: (date) {},
-          onTimeUpdate: (time) {},
+          onDateUpdate: (date) {
+            context.read<EventCreateBloc>().add(EventDataUpdateRequested(selectedDate: date));
+          },
+          onTimeUpdate: (time) {
+             context.read<EventCreateBloc>().add(EventDataUpdateRequested(selectedTime: time));
+          },
           pickedDate: selectedDate,
           pickedTime: selectedTime,
         ),

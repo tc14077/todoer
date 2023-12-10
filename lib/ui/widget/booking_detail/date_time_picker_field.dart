@@ -3,14 +3,15 @@ part of 'booking_detail_widget.dart';
 class DateTimePickerField extends StatelessWidget {
   DateTimePickerField({
     super.key,
-    required TextEditingController dateController,
-    required TextEditingController timeController,
     required this.onDateUpdate,
     required this.onTimeUpdate,
     required this.pickedDate,
     required this.pickedTime,
-  })  : _dateController = dateController,
-        _timeController = timeController;
+  })  : _dateController = TextEditingController(
+            text: DateFormat('dd/MM/yyyy').format(pickedDate)),
+        _timeController = TextEditingController(
+            text: DateFormat('HH:mm').format(
+                DateTime(0, 1, 1, pickedTime.hour, pickedTime.minute)));
 
   final TextEditingController _dateController;
   final TextEditingController _timeController;

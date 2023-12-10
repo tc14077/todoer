@@ -15,17 +15,10 @@ class BookingDetailWidget extends StatelessWidget {
     String? name,
     String? remark,
   })  : _eventNameController = TextEditingController(text: name),
-        _eventRemarkController = TextEditingController(text: remark),
-        _eventDateController = TextEditingController(
-            text: DateFormat('dd/MM/yyyy').format(selectedDate)),
-        _eventTimeController = TextEditingController(
-            text: DateFormat('HH:mm').format(
-                DateTime(0, 1, 1, selectedTime.hour, selectedTime.minute)));
+        _eventRemarkController = TextEditingController(text: remark);
 
   final TextEditingController _eventNameController;
   final TextEditingController _eventRemarkController;
-  final TextEditingController _eventDateController;
-  final TextEditingController _eventTimeController;
   final DateTime defaultBookingTime;
   final DateTime selectedDate;
   final TimeOfDay selectedTime;
@@ -49,8 +42,6 @@ class BookingDetailWidget extends StatelessWidget {
           ),
         ),
         DateTimePickerField(
-          dateController: _eventDateController,
-          timeController: _eventTimeController,
           onDateUpdate: (date) {},
           onTimeUpdate: (time) {},
           pickedDate: selectedDate,

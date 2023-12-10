@@ -6,7 +6,8 @@ import 'package:todoer/ui/widget/booking_detail/booking_detail_widget.dart';
 import '../system/themed_text.dart';
 
 class CreateBookingScreen extends StatelessWidget {
-  const CreateBookingScreen({super.key});
+  CreateBookingScreen({super.key});
+  final bookingDetailWidgetKey = UniqueKey();
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +30,9 @@ class CreateBookingScreen extends StatelessWidget {
               builder: (context, state) {
                 if (state is EventDataUpdateSuccess) {
                   return BookingDetailWidget(
+                    key: bookingDetailWidgetKey,
                     defaultBookingTime: DateTime.now(),
-                    name: state.name,
+                    bookingName: state.name,
                     remark: state.remark,
                     selectedDate: state.selectedDate,
                     selectedTime: state.selectedTime,

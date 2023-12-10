@@ -19,7 +19,7 @@ class HomeLocation extends BeamLocation<BeamState> {
     ];
     if (state.pathPatternSegments.contains('createBooking')) {
       pages.add(
-        const BeamPage(
+        BeamPage(
           key: ValueKey('createBooking'),
           child: CreateBookingScreen(),
         ),

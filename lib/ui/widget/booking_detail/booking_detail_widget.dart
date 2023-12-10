@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:todoer/bloc/event_create/event_create_bloc.dart';
+import 'package:todoer/enum/event_form_error.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 
 import 'invitee_form.dart';
@@ -17,6 +18,7 @@ class BookingDetailWidget extends StatefulWidget {
     required this.inviteePairList,
     this.bookingName,
     this.remark,
+    this.errors,
   });
   final String? bookingName;
   final String? remark;
@@ -25,6 +27,7 @@ class BookingDetailWidget extends StatefulWidget {
   final DateTime selectedDate;
   final TimeOfDay selectedTime;
   final List<InviteePair> inviteePairList;
+  final Set<EventFormError>? errors;
 
   @override
   State<BookingDetailWidget> createState() => _BookingDetailWidgetState();
@@ -69,8 +72,12 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
         TextField(
           key: nameFieldKey,
           controller: _eventNameController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: 'Booking Name',
+            errorText:
+                widget.errors?.contains(EventFormError.nameNotFound) == true
+                    ? 'This field is required'
+                    : null,
           ),
           onChanged: (value) => context
               .read<EventCreateBloc>()

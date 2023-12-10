@@ -1,25 +1,61 @@
 part of 'booking_detail_widget.dart';
 
-class DateTimePickerField extends StatelessWidget {
-  DateTimePickerField({
+class DateTimePickerField extends StatefulWidget {
+  const DateTimePickerField({
     super.key,
     required this.onDateUpdate,
     required this.onTimeUpdate,
     required this.pickedDate,
     required this.pickedTime,
-  })  : _dateController = TextEditingController(
-            text: DateFormat('dd/MM/yyyy').format(pickedDate)),
-        _timeController = TextEditingController(
-            text: DateFormat('HH:mm').format(
-                DateTime(0, 1, 1, pickedTime.hour, pickedTime.minute)));
+  });
 
-  final TextEditingController _dateController;
-  final TextEditingController _timeController;
   final Function(DateTime? date) onDateUpdate;
   final Function(TimeOfDay? time) onTimeUpdate;
   final DateTime pickedDate;
   final TimeOfDay pickedTime;
+
+  @override
+  State<DateTimePickerField> createState() => _DateTimePickerFieldState();
+}
+
+class _DateTimePickerFieldState extends State<DateTimePickerField> {
   final DateTime today = DateTime.now();
+  late final TextEditingController _dateController;
+  late final TextEditingController _timeController;
+  final _dateFieldKey = UniqueKey();
+  final _timeFieldKey = UniqueKey();
+
+  @override
+  void initState() {
+    _dateController = TextEditingController(
+        text: DateFormat('dd/MM/yyyy').format(
+      widget.pickedDate,
+    ));
+    _timeController = TextEditingController(
+        text: DateFormat('HH:mm').format(DateTime(
+      0,
+      1,
+      1,
+      widget.pickedTime.hour,
+      widget.pickedTime.minute,
+    )));
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant DateTimePickerField oldWidget) {
+    _dateController.text = DateFormat('dd/MM/yyyy').format(
+      widget.pickedDate,
+    );
+    _timeController.text = DateFormat('HH:mm').format(DateTime(
+      0,
+      1,
+      1,
+      widget.pickedTime.hour,
+      widget.pickedTime.minute,
+    ));
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +64,7 @@ class DateTimePickerField extends StatelessWidget {
         Flexible(
           flex: 1,
           child: TextField(
+            key: _dateFieldKey,
             controller: _dateController,
             decoration: const InputDecoration(
               labelText: 'Booking Date',
@@ -37,14 +74,14 @@ class DateTimePickerField extends StatelessWidget {
             onTap: () async {
               final date = await showDatePicker(
                 context: context,
-                initialDate: pickedDate,
+                initialDate: widget.pickedDate,
                 firstDate: today.subtract(const Duration(days: 1)),
                 lastDate: today.add(const Duration(days: 365)),
-                currentDate: pickedDate,
+                currentDate: widget.pickedDate,
                 initialEntryMode: DatePickerEntryMode.calendarOnly,
                 initialDatePickerMode: DatePickerMode.day,
               );
-              onDateUpdate(date);
+              widget.onDateUpdate(date);
             },
           ),
         ),
@@ -54,6 +91,7 @@ class DateTimePickerField extends StatelessWidget {
         Flexible(
           flex: 1,
           child: TextField(
+            key: _timeFieldKey,
             controller: _timeController,
             decoration: const InputDecoration(
               labelText: 'Booking Time',
@@ -64,8 +102,8 @@ class DateTimePickerField extends StatelessWidget {
               final selectedTime = await showTimePicker(
                 context: context,
                 initialTime: TimeOfDay(
-                  hour: pickedTime.hour,
-                  minute: pickedTime.minute,
+                  hour: widget.pickedTime.hour,
+                  minute: widget.pickedTime.minute,
                 ),
                 initialEntryMode: TimePickerEntryMode.inputOnly,
                 builder: (BuildContext context, Widget? child) {
@@ -76,7 +114,7 @@ class DateTimePickerField extends StatelessWidget {
                   );
                 },
               );
-              onTimeUpdate(selectedTime);
+              widget.onTimeUpdate(selectedTime);
             },
           ),
         ),

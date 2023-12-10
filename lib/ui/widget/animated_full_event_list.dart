@@ -10,10 +10,12 @@ class AnimatedFullEventList extends StatelessWidget {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   final Map<DateDisplayItem, List<EventDisplayItem>> eventMap;
   late final ListModel<Displayable> _list;
+  final Function(int eventId) onDeleteEventRequested;
 
   AnimatedFullEventList({
     super.key,
     required this.eventMap,
+    required this.onDeleteEventRequested,
   }) {
     final List<Displayable> displayableItems = [];
     eventMap.forEach((key, value) {
@@ -42,6 +44,7 @@ class AnimatedFullEventList extends StatelessWidget {
       contactName: invitees?.firstOrNull?.name,
       contactNumber: invitees?.firstOrNull?.phoneNumber,
       onTap: () {},
+      onDeleteButtonTap: (eventId) => onDeleteEventRequested(eventId),
       // No gesture detector here: we don't want removed items to be interactive.
     ),
     DateDisplayItem(dateTime: var dateTime) => TitleMediumText(DateFormat('dd/MM/yyyy').format(dateTime))

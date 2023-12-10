@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 
 import '../../data/database/app_database.dart';
+
 /// Displays the event item on a Card together with DateTime information
 ///
 /// This widget's height is based on the [animation] parameter, it
@@ -11,6 +12,7 @@ class EventCard extends StatelessWidget {
   const EventCard({
     super.key,
     this.onTap,
+    this.onDeleteButtonTap,
     required this.animation,
     required this.event,
     this.invitees,
@@ -20,6 +22,7 @@ class EventCard extends StatelessWidget {
 
   final Animation<double> animation;
   final VoidCallback? onTap;
+  final Function(int eventId)? onDeleteButtonTap;
   final Event event;
   final List<Invitee>? invitees;
   final String? contactName;
@@ -48,35 +51,48 @@ class EventCard extends StatelessWidget {
           child: Container(
             constraints: const BoxConstraints(minHeight: 80),
             child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    BodyMediumText(
-                      '${DateFormat('dd/MM, HH:mm').format(event.happenedAt)} , $contactString',
-                      textAlign: TextAlign.left,
-                    ),
-                    const SizedBox.square(dimension: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            BodyMediumText('${event.name} x $numberOfInvitees'),
-                            if (event.remark != null)
-                            BodyMediumText('${event.remark}'),
-                            // if (contactString != null)
-                            //   BodyMediumText(contactString),
-],
+                        BodyMediumText(
+                          '${DateFormat('dd/MM, HH:mm').format(event.happenedAt)} , $contactString',
+                          textAlign: TextAlign.left,
                         ),
-                        // FIXME: remove this spacer
-                        const Spacer(),
+                        const SizedBox.square(dimension: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                BodyMediumText(
+                                    '${event.name} x $numberOfInvitees'),
+                                if (event.remark != null)
+                                  BodyMediumText('${event.remark}'),
+                                // if (contactString != null)
+                                //   BodyMediumText(contactString),
+                              ],
+                            ),
+                            // FIXME: remove this spacer
+                            const Spacer(),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(
+                      icon: const Icon(Icons.cancel),
+                      onPressed: () => onDeleteButtonTap?.call(event.id),
+                    ),
+                  )
+                ],
               ),
             ),
           ),

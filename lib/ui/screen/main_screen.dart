@@ -2,6 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoer/navigation/location/beam_locations.dart';
+import 'package:todoer/navigation/location/calendar_view_location.dart';
 
 import '../../bloc/bottom_nav_bar/cubit/bottom_nav_bar_cubit.dart';
 import '../../navigation/beamer/main_beamer.dart';
@@ -55,7 +56,12 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _currentIndex = _beamerDelegate.currentBeamLocation is HomeLocation ? 0 : 1;
+    _currentIndex = switch (_beamerDelegate.currentBeamLocation){
+      HomeLocation() => 0,
+      CalendarViewLocation() => 1,
+      SettingsLocation() => 2,
+      _ => 0,
+    };
     return BlocBuilder<BottomNavBarCubit, bool>(
       builder: (context, state) {
         return AnimatedBottomNavigationBar(

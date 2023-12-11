@@ -4,6 +4,7 @@ import 'package:todoer/navigation/beamer/main_router.dart';
 import 'package:todoer/navigation/path/app_path.dart';
 
 import '../location/beam_locations.dart';
+import '../location/calendar_view_location.dart';
 
 class BeamerMain {
   static final beamerKey = GlobalKey<BeamerState>();
@@ -18,6 +19,7 @@ class BeamerMain {
     locationBuilder: BeamerLocationBuilder(
       beamLocations: [
         HomeLocation(),
+        CalendarViewLocation(),
         SettingsLocation(),
       ],
     ),
@@ -31,7 +33,8 @@ class BeamerMain {
       final beamState = currentBeamLocation.state;
       final currentUri = (beamState as BeamState).uriBlueprint.path;
       if (currentUri == AppPath.home ||
-          currentUri == AppPath.settings) {
+          currentUri == AppPath.settings ||
+          currentUri == AppPath.calendarView) {
         return true;
       }
       return false;

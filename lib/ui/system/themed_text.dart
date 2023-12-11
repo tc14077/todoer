@@ -400,6 +400,7 @@ class LabelSmallText extends StatelessWidget {
   final TextStyle? style;
   final TextAlign? textAlign;
   final FontWeight? fontWeight;
+  final Color? textColor;
 
   const LabelSmallText(
     this.data, {
@@ -407,6 +408,7 @@ class LabelSmallText extends StatelessWidget {
     this.style,
     this.textAlign,
     this.fontWeight,
+    this.textColor,
   }) : super(key: key);
 
   @override
@@ -414,10 +416,10 @@ class LabelSmallText extends StatelessWidget {
     return Text(
       data,
       style: style ??
-          Theme.of(context)
-              .textTheme
-              .labelSmall
-              ?.copyWith(fontWeight: fontWeight),
+          Theme.of(context).textTheme.labelSmall?.copyWith(
+                fontWeight: fontWeight,
+                color: textColor,
+              ),
       textAlign: textAlign ?? TextAlign.start,
     );
   }

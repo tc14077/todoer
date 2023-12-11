@@ -52,7 +52,22 @@ extension DeleteById<TableDsl extends Table, D> on TableInfo<TableDsl, D> {
   }
 }
 
-
+extension UpdateById<TableDsl extends Table, D> on TableInfo<TableDsl, D> {
+  UpdateStatement<TableDsl, D> updateById(int id) {
+    return update()
+      ..where((row) {
+        final idColumn = columnsByName['id'];
+        if (idColumn == null) {
+          throw ArgumentError.value(
+              this, 'this', 'Must be a table with an id column');
+        }
+        if (idColumn.type != DriftSqlType.int) {
+          throw ArgumentError('Column `id` is not an integer');
+        }
+        return idColumn.equals(id);
+      });
+  }
+}
 
 class BaseDao<K extends BaseTable, R> {
   final AppDatabase appDatabase;
@@ -91,6 +106,11 @@ class BaseDao<K extends BaseTable, R> {
   // insert
   Future<void> insertMultiple(List<Insertable<R>> rs) {
     return (table as TableInfo).insertAll(rs);
+  }
+
+  // insert
+  Future<int> updateSingle(int id, Insertable<R> entry) {
+    return (table as TableInfo).updateById(id).write(entry);
   }
 
   // // Update(onConflict: OnConflictStrategy.ignore)

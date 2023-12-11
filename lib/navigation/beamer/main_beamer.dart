@@ -8,6 +8,12 @@ class BeamerMain {
   static final beamerKey = GlobalKey<BeamerState>();
 
   static final routerDelegate = BeamerDelegate(
+    routeListener: (info, delegate) {
+      final currentBeamLocation = delegate.currentBeamLocation;
+      final beamState = currentBeamLocation.state;
+      final currentUri = (beamState as BeamState).uriBlueprint.path;
+      print('BeamerMain-uriBlueprint: $currentUri');
+    },
     locationBuilder: BeamerLocationBuilder(
       beamLocations: [
         HomeLocation(),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:todoer/bloc/event_create/event_create_bloc.dart';
 import 'package:todoer/enum/event_form_error.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 
@@ -10,7 +8,37 @@ import 'invitee_form.dart';
 
 part 'date_time_picker_field.dart';
 
-class BookingDetailWidget extends StatefulWidget {
+abstract class BookingFormInterface {
+  void onBookingNameChanged(
+    BuildContext context,
+    String name,
+  );
+
+  void onRemarkChanged(
+    BuildContext context,
+    String remark,
+  );
+
+  void onDateChanged(
+    BuildContext context,
+    DateTime dateTime,
+  );
+
+  void onTimeChanged(
+    BuildContext context,
+    TimeOfDay timeOfDay,
+  );
+
+  void onInviteeInfoChanged(
+    BuildContext context,
+    String hashId,
+    String name,
+    String phoneNumber,
+  );
+}
+
+abstract class BookingDetailWidget extends StatefulWidget
+    implements BookingFormInterface {
   const BookingDetailWidget({
     super.key,
     required this.defaultBookingTime,
@@ -62,11 +90,8 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
           inviteePhoneNumber: pair.record.inviteePhoneNumber ?? '',
           eventFormError: widget.inviteeFormErrors?[pair.hashId],
           onInviteeInfoUpdate: (name, phoneNumber) {
-            context.read<EventCreateBloc>().add(InviteeDataUpdateRequested(
-                  hashId: pair.hashId,
-                  name: name,
-                  phoneNumber: phoneNumber,
-                ));
+            widget.onInviteeInfoChanged(
+                context, pair.hashId, name, phoneNumber);
           },
         ));
     return Column(
@@ -83,9 +108,7 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
                     ? 'This field is required'
                     : null,
           ),
-          onChanged: (value) => context
-              .read<EventCreateBloc>()
-              .add(EventDataUpdateRequested(name: value)),
+          onChanged: (value) => widget.onBookingNameChanged(context, value),
         ),
         TextField(
           key: remarkFieldKey,
@@ -93,20 +116,18 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
           decoration: const InputDecoration(
             labelText: 'Remark (Optional)',
           ),
-          onChanged: (value) => context
-              .read<EventCreateBloc>()
-              .add(EventDataUpdateRequested(remark: value)),
+          onChanged: (value) => widget.onRemarkChanged(context, value),
         ),
         DateTimePickerField(
           onDateUpdate: (date) {
-            context
-                .read<EventCreateBloc>()
-                .add(EventDataUpdateRequested(selectedDate: date));
+            if (date != null) {
+              widget.onDateChanged(context, date);
+            }
           },
           onTimeUpdate: (time) {
-            context
-                .read<EventCreateBloc>()
-                .add(EventDataUpdateRequested(selectedTime: time));
+            if (time != null) {
+              widget.onTimeChanged(context, time);
+            }
           },
           pickedDate: widget.selectedDate,
           pickedTime: widget.selectedTime,

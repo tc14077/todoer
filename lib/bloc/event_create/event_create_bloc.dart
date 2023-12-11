@@ -8,12 +8,10 @@ import 'package:uuid/uuid.dart';
 import '../../data/database/app_database.dart';
 import '../../enum/event_form_error.dart';
 import '../../repositories/event_repository.dart';
+import '../model/invitee_form_record.dart';
 
 part 'event_create_event.dart';
 part 'event_create_state.dart';
-part 'invitee_form_record.dart';
-
-typedef InviteePair = ({String hashId, InviteeFormRecord record});
 
 class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
   String? name;

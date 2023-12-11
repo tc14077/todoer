@@ -1,4 +1,6 @@
-part of 'event_create_bloc.dart';
+import 'package:equatable/equatable.dart';
+
+typedef InviteePair = ({String hashId, InviteeFormRecord record});
 
 class InviteeFormRecord extends Equatable {
   final String? inviteeName;

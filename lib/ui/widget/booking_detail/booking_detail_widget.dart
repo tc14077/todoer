@@ -5,6 +5,7 @@ import 'package:todoer/bloc/event_create/event_create_bloc.dart';
 import 'package:todoer/enum/event_form_error.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 
+import '../../../bloc/model/invitee_form_record.dart';
 import 'invitee_form.dart';
 
 part 'date_time_picker_field.dart';

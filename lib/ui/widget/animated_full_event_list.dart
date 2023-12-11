@@ -35,19 +35,66 @@ class AnimatedFullEventList extends StatelessWidget {
     int index,
     Animation<double> animation,
   ) {
-    final item =  _list[index];
-    return switch(item){
+    final item = _list[index];
+    return switch (item) {
       EventDisplayItem(event: var event, invitees: var invitees) => EventCard(
-      animation: animation,
-      event: event,
-      invitees: invitees,
-      contactName: invitees?.firstOrNull?.name,
-      contactNumber: invitees?.firstOrNull?.phoneNumber,
-      onTap: () {},
-      onDeleteButtonTap: (eventId) => onDeleteEventRequested(eventId),
-      // No gesture detector here: we don't want removed items to be interactive.
-    ),
-    DateDisplayItem(dateTime: var dateTime) => TitleMediumText(DateFormat('dd/MM/yyyy').format(dateTime))
+          animation: animation,
+          event: event,
+          invitees: invitees,
+          contactName: invitees?.firstOrNull?.name,
+          contactNumber: invitees?.firstOrNull?.phoneNumber,
+          onTap: () {},
+          onDeleteButtonTap: (eventId) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: RichText(
+                    text: TextSpan(
+                      children: [
+                        const WidgetSpan(
+                          child: TitleMediumText('Wanna delete '),
+                        ),
+                        WidgetSpan(
+                          child: TitleMediumText(
+                            event.name,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const WidgetSpan(
+                          child: TitleMediumText('?'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    TextButton.icon(
+                      onPressed: () {
+                        onDeleteEventRequested(eventId);
+                        Navigator.pop(context);
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.redAccent.shade100,
+                      ),
+                      icon: const Icon(Icons.delete),
+                      label: const LabelMediumText('Delete'),
+                    ),
+                    TextButton.icon(
+                      onPressed: () => Navigator.pop(context),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.blueGrey.shade100,
+                      ),
+                      icon: const Icon(Icons.arrow_back),
+                      label: const LabelMediumText('Cancel'),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
+      DateDisplayItem(dateTime: var dateTime) =>
+        TitleMediumText(DateFormat('dd/MM/yyyy').format(dateTime))
     };
   }
 
@@ -72,14 +119,15 @@ class AnimatedFullEventList extends StatelessWidget {
     BuildContext context,
     Animation<double> animation,
   ) {
-    return switch(item){
+    return switch (item) {
       EventDisplayItem(event: var event, invitees: var invitees) => EventCard(
-      animation: animation,
-      event: event,
-      invitees: invitees,
-      // No gesture detector here: we don't want removed items to be interactive.
-    ),
-    DateDisplayItem(dateTime: var dateTime) => BodyMediumText(dateTime.toString())
+          animation: animation,
+          event: event,
+          invitees: invitees,
+          // No gesture detector here: we don't want removed items to be interactive.
+        ),
+      DateDisplayItem(dateTime: var dateTime) =>
+        BodyMediumText(dateTime.toString())
     };
   }
 }

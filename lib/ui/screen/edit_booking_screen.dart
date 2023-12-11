@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoer/repositories/event_repository.dart';
 import 'package:todoer/repositories/invitee_repository.dart';
 import 'package:todoer/ui/widget/booking_detail/booking_detail_widget.dart';
+import 'package:todoer/ui/widget/booking_detail/edit_booking_widget.dart';
 
 import '../../bloc/event_edit/event_edit_bloc.dart';
 import '../../main.dart';
@@ -58,7 +59,7 @@ class EditBookingScreen extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state is EventDataUpdateSuccess) {
-                  return BookingDetailWidget(
+                  return EditBookingWidget(
                     key: bookingDetailWidgetKey,
                     defaultBookingTime: DateTime.now(),
                     bookingName: state.name,
@@ -69,7 +70,7 @@ class EditBookingScreen extends StatelessWidget {
                   );
                 }
                 if (state is EventEditFailure) {
-                  return BookingDetailWidget(
+                  return EditBookingWidget(
                     key: bookingDetailWidgetKey,
                     defaultBookingTime: DateTime.now(),
                     bookingName: state.name,

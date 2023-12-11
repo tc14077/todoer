@@ -1,8 +1,11 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:todoer/bloc/mixins/invitee_records_validator.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../data/database/app_database.dart';
 import '../../enum/event_form_error.dart';
 import '../../repositories/event_repository.dart';
 import '../../repositories/invitee_repository.dart';
@@ -11,13 +14,15 @@ import '../model/invitee_form_record.dart';
 part 'event_edit_event.dart';
 part 'event_edit_state.dart';
 
-class EventEditBloc extends Bloc<EventEditEvent, EventEditState> {
+class EventEditBloc extends Bloc<EventEditEvent, EventEditState>
+    with InviteeRecordsValidator {
   final int eventId;
   late String name;
   String? remark;
   late DateTime selectedDate;
   late TimeOfDay selectedTime;
   final Map<String, InviteeFormRecord> inviteeFormRecordMap = {};
+  final Map<String, int> inviteeRecordIdMap = {};
   List<InviteePair> get inviteeRecordList => inviteeFormRecordMap.entries
       .map((e) => (hashId: e.key, record: e.value))
       .toList();
@@ -50,13 +55,13 @@ class EventEditBloc extends Bloc<EventEditEvent, EventEditState> {
     selectedDate = event.happenedAt;
     selectedTime = TimeOfDay.fromDateTime(selectedDate);
     final invitees = await inviteeRepository.getInviteesInEvent(event: event);
-    final inviteeRecords = invitees.map((e) => InviteeFormRecord(
-          inviteeName: e.name,
-          inviteePhoneNumber: e.phoneNumber,
-        ));
-    for (var element in inviteeRecords) {
+    for (var invitee in invitees) {
       final hashId = const Uuid().v4();
-      inviteeFormRecordMap[hashId] = element;
+      inviteeFormRecordMap[hashId] = InviteeFormRecord(
+        inviteeName: invitee.name,
+        inviteePhoneNumber: invitee.phoneNumber,
+      );
+      inviteeRecordIdMap[hashId] = invitee.id;
     }
     emit(EventDataUpdateSuccess(
       name: name,
@@ -104,5 +109,59 @@ class EventEditBloc extends Bloc<EventEditEvent, EventEditState> {
   void _onEventEditRequested(
     EventEditRequested event,
     Emitter<EventEditState> emit,
-  ) {}
+  ) async {
+    emit(EventEditInProgress());
+    final happenedAt = selectedDate.copyWith(
+      hour: selectedTime.hour,
+      minute: selectedTime.minute,
+    );
+
+    final inviteeRecordValidateResult =
+        validateInviteeRecords(inviteeFormRecordMap)
+          ..removeWhere((key, value) => value.isEmpty);
+
+    if (name == '' || inviteeRecordValidateResult.isNotEmpty) {
+      final errors = {
+        if (name == '') EventFormError.nameNotFound,
+      };
+
+      emit(EventEditFailure(
+        name: name,
+        remark: remark,
+        selectedDate: selectedDate,
+        selectedTime: selectedTime,
+        inviteePairList: inviteeRecordList,
+        errors: errors,
+        inviteeFormErrors: inviteeRecordValidateResult,
+      ));
+      return;
+    }
+    
+    await eventRepository.updateItem(
+      eventId,
+      EventsCompanion(
+        name: Value(name),
+        remark: Value(remark),
+        happenedAt: Value(happenedAt),
+      ),
+    );
+
+    for (var inviteeDbRecord in inviteeRecordIdMap.entries) {
+      final inviteeRecord = inviteeFormRecordMap[inviteeDbRecord.key];
+      final inviteeId = inviteeDbRecord.value;
+      if (inviteeRecord == null) {
+        await inviteeRepository.deleteItemById(inviteeId);
+      } else {
+        await inviteeRepository.updateItem(
+          inviteeId,
+          InviteesCompanion(
+            name: Value(inviteeRecord.inviteeName!),
+            phoneNumber: Value(inviteeRecord.inviteePhoneNumber),
+          ),
+        );
+      }
+    }
+
+    emit(EventEditSuccess());
+  }
 }

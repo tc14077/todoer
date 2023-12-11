@@ -8,12 +8,14 @@ import 'package:uuid/uuid.dart';
 import '../../data/database/app_database.dart';
 import '../../enum/event_form_error.dart';
 import '../../repositories/event_repository.dart';
+import '../mixins/invitee_records_validator.dart';
 import '../model/invitee_form_record.dart';
 
 part 'event_create_event.dart';
 part 'event_create_state.dart';
 
-class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
+class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState>
+    with InviteeRecordsValidator {
   String? name;
   String? remark;
   late DateTime selectedDate;
@@ -100,11 +102,11 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
       minute: selectedTime.minute,
     );
 
-    final inviteeRecordValidateResult = _validateInviteeRecords()..removeWhere((key, value) => value.isEmpty);
+    final inviteeRecordValidateResult =
+        validateInviteeRecords(inviteeFormRecordMap)
+          ..removeWhere((key, value) => value.isEmpty);
 
-    if (name == null ||
-        name == '' ||
-        inviteeRecordValidateResult.isNotEmpty) {
+    if (name == null || name == '' || inviteeRecordValidateResult.isNotEmpty) {
       final errors = {
         if (name == null || name == '') EventFormError.nameNotFound,
       };
@@ -135,15 +137,5 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState> {
       ),
     ));
     emit(EventCreateSuccess());
-  }
-
-  Map<String, Set<EventFormError>> _validateInviteeRecords() {
-    return inviteeFormRecordMap.map((key, value) {
-      final errors = {
-        if (value.inviteeName == null || value.inviteeName == '')
-          EventFormError.defaultInviteeNameNotFound,
-      };
-      return MapEntry(key, errors);
-    });
   }
 }

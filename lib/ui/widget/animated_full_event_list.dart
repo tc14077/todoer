@@ -11,11 +11,13 @@ class AnimatedFullEventList extends StatelessWidget {
   final Map<DateDisplayItem, List<EventDisplayItem>> eventMap;
   late final ListModel<Displayable> _list;
   final Function(int eventId) onDeleteEventRequested;
+  final Function(int eventId) onEventCardTap;
 
   AnimatedFullEventList({
     super.key,
     required this.eventMap,
     required this.onDeleteEventRequested,
+    required this.onEventCardTap,
   }) {
     final List<Displayable> displayableItems = [];
     eventMap.forEach((key, value) {
@@ -43,7 +45,9 @@ class AnimatedFullEventList extends StatelessWidget {
           invitees: invitees,
           contactName: invitees?.firstOrNull?.name,
           contactNumber: invitees?.firstOrNull?.phoneNumber,
-          onTap: () {},
+          onTap: () {
+            onEventCardTap(event.id);
+          },
           onDeleteButtonTap: (eventId) {
             showDialog(
               context: context,

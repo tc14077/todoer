@@ -13,7 +13,7 @@ class TableCalendarWidget extends StatefulWidget {
   final Map<DateDisplayItem, List<EventDisplayItem>>? eventDisplayItemMap;
   final CalendarFormat calendarFormat;
   final firstDay = DateTime.utc(2023, 10, 1);
-  final lastDay = DateTime.utc(2023, 12, 31);
+  final lastDay = DateTime.utc(2024, 12, 31);
 
   TableCalendarWidget({
     super.key,
@@ -59,8 +59,9 @@ class TableCalendarWidgetState extends State<TableCalendarWidget> {
         firstDay: widget.firstDay,
         lastDay: widget.lastDay,
         focusedDay: _focusedDay,
+        currentDay: _selectedDay,
         calendarFormat: calendarFormat,
-        headerVisible: false,
+        headerVisible: true,
         eventLoader: eventLoader,
         calendarBuilders:
             CalendarBuilders(markerBuilder: (context, day, eventDisplayItems) {

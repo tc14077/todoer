@@ -27,8 +27,15 @@ class CalendarViewScreen extends StatelessWidget {
   }
 }
 
-class CalendarViewWidget extends StatelessWidget {
+class CalendarViewWidget extends StatefulWidget {
   const CalendarViewWidget({super.key});
+
+  @override
+  State<CalendarViewWidget> createState() => _CalendarViewWidgetState();
+}
+
+class _CalendarViewWidgetState extends State<CalendarViewWidget> {
+  DateTime selectedDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +56,11 @@ class CalendarViewWidget extends StatelessWidget {
                   children: [
                     TableCalendarWidget(
                       eventDisplayItemMap: itemMap,
-                      focusedDay: DateTime.now(),
-                      onDaySelected: (day) {},
+                      focusedDay: selectedDay,
+                      onDaySelected: (day) {
+                        selectedDay = day;
+                        setState(() {});
+                      },
                     ),
                   ],
                 ),

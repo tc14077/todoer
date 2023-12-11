@@ -1,12 +1,14 @@
 class AppPath {
   static const main = '/main';
+  
   static const home = '$main/home';
-
   static const createBooking = '$home/createBooking';
   static const editBooking = '$home/editBooking/:eventId';
 
   static const settings = '$main/settings';
   static const appTheme = '$settings/app_theme';
+
+  static const calendarView = '$main/calendar_view';
 }
 
 

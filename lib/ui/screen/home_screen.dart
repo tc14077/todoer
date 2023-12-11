@@ -71,6 +71,14 @@ class HomeWidget extends StatelessWidget {
                                 .read<EventListingBloc>()
                                 .add(EventDeleteRequested(eventId: eventId));
                           },
+                          onEventCardTap: (eventId) {
+                            context.beamToNamed(
+                              AppPath.editBooking.getAppPathWithParams(
+                                params: [eventId.toString()],
+                              ),
+                              beamBackOnPop: true,
+                            );
+                          },
                         ),
                       ),
                     ),

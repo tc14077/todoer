@@ -31,7 +31,8 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? contactString;
-    if (contactName != null && contactNumber != null) {
+    if (contactName != null &&
+        (contactNumber != null && contactNumber?.isNotEmpty == true)) {
       contactString = '👤$contactName, 📞$contactNumber';
     } else if (contactName != null) {
       contactString = '👤$contactName';

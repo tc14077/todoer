@@ -52,6 +52,8 @@ extension DeleteById<TableDsl extends Table, D> on TableInfo<TableDsl, D> {
   }
 }
 
+
+
 class BaseDao<K extends BaseTable, R> {
   final AppDatabase appDatabase;
   final ResultSetImplementation<K, R> table;
@@ -98,13 +100,9 @@ class BaseDao<K extends BaseTable, R> {
   // Future<int> updateMultiple(List<T> ts);
 
   // // delete
-  // Future<void> deleteSingle(T t);
-
-  // // delete
   // Future<int> deleteMultiple(List<T> ts);
 
-  // transaction
-  Future<int> deleteById(int id) async {
+  Future<int> deleteSingle(int id) async {
     return (table as TableInfo).deleteById(id).go();
   }
 

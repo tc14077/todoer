@@ -38,6 +38,10 @@ class _AnimatedBottomNavigationBarState
             label: 'Home',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'Calendar View',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
           )
@@ -48,6 +52,10 @@ class _AnimatedBottomNavigationBarState
             return;
           }
           if (index == 1) {
+            widget._beamerDelegate.beamToNamed(AppPath.calendarView);
+            return;
+          }
+          if (index == 2) {
             widget._beamerDelegate.beamToNamed(AppPath.settings);
             return;
           }

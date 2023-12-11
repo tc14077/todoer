@@ -5,7 +5,9 @@ class BottomNavBarCubit extends Cubit<bool> {
   BottomNavBarCubit() : super(true);
 
   void appPathUpdate(String appPath) {
-    if (appPath == AppPath.home || appPath == AppPath.settings) {
+    if (appPath == AppPath.home ||
+        appPath == AppPath.settings ||
+        appPath == AppPath.calendarView) {
       emit(true);
       return;
     }

@@ -59,6 +59,7 @@ class EventEditBloc extends Bloc<EventEditEvent, EventEditState>
       final hashId = const Uuid().v4();
       inviteeFormRecordMap[hashId] = InviteeFormRecord(
         inviteeName: invitee.name,
+        inviteeCountryCode: invitee.countryCode,
         inviteePhoneNumber: invitee.phoneNumber,
       );
       inviteeRecordIdMap[hashId] = invitee.id;
@@ -94,7 +95,10 @@ class EventEditBloc extends Bloc<EventEditEvent, EventEditState>
     Emitter<EventEditState> emit,
   ) {
     final newRecord = inviteeFormRecordMap[event.hashId]?.copyWith(
-        inviteeName: event.name, inviteePhoneNumber: event.phoneNumber);
+      inviteeName: event.name,
+      inviteeCountryCode: event.countryCode,
+      inviteePhoneNumber: event.phoneNumber,
+    );
     if (newRecord != null) inviteeFormRecordMap[event.hashId] = newRecord;
     //TODO fix hashId not found case
     emit(EventDataUpdateSuccess(
@@ -136,7 +140,7 @@ class EventEditBloc extends Bloc<EventEditEvent, EventEditState>
       ));
       return;
     }
-    
+
     await eventRepository.updateItem(
       eventId,
       EventsCompanion(
@@ -156,6 +160,7 @@ class EventEditBloc extends Bloc<EventEditEvent, EventEditState>
           inviteeId,
           InviteesCompanion(
             name: Value(inviteeRecord.inviteeName!),
+            countryCode: Value(inviteeRecord.inviteeCountryCode),
             phoneNumber: Value(inviteeRecord.inviteePhoneNumber),
           ),
         );

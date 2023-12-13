@@ -38,18 +38,21 @@ final class InviteeDataUpdateRequested extends EventCreateEvent {
   final String hashId;
   final String? name;
   final String? phoneNumber;
+  final String? countryCode;
 
   const InviteeDataUpdateRequested({
     required this.hashId,
     this.name,
-    this.phoneNumber
+    this.countryCode,
+    this.phoneNumber,
   });
 
   @override
   List<Object?> get props => [
         hashId,
         name,
-        phoneNumber
+        countryCode,
+        phoneNumber,
       ];
 }
 

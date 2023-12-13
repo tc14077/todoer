@@ -15,10 +15,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.2.0
 
 environment:
-  sdk: ">=2.16.1 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -33,19 +33,38 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  beamer: ^1.4.0+1
+  cupertino_icons: ^1.0.5
+  beamer: ^1.5.6
+  flutter_bloc: ^8.1.3
+  google_fonts: ^6.1.0
+  drift: ^2.12.1
+  sqlite3_flutter_libs: ^0.5.17
+  path_provider: ^2.1.1
+  path: ^1.8.3
+  json_annotation: ^4.8.1
+  get_it: ^7.6.4
+  table_calendar: ^3.0.9
+  intl: ^0.18.1
+  badges: ^3.1.2
+  meta: ^1.9.1
+  equatable: ^2.0.5
+  collection: ^1.17.1
+  uuid: ^4.2.1
+  url_launcher: ^6.1.14
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  drift_dev: ^2.1.0
+  build_runner: ^2.2.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -59,10 +78,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
-
+  assets:
+    - google_fonts/ #can download the fonts from https://fonts.google.com/, and avoid download texttheme during runtime
+    - assets/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

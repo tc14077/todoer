@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todoer/ui/system/themed_text.dart';
@@ -13,35 +14,32 @@ class EventCard extends StatelessWidget {
     super.key,
     this.onTap,
     this.onDeleteButtonTap,
+    this.onContactNumberTap,
     required this.animation,
     required this.event,
     this.invitees,
     this.contactName,
     this.contactNumber,
+    this.countryCode,
   });
 
   final Animation<double> animation;
   final VoidCallback? onTap;
   final Function(int eventId)? onDeleteButtonTap;
+  final Function(
+    String contactName,
+    String countryCode,
+    String contactNumber,
+  )? onContactNumberTap;
   final Event event;
   final List<Invitee>? invitees;
   final String? contactName;
   final String? contactNumber;
+  final String? countryCode;
 
   @override
   Widget build(BuildContext context) {
-    String? contactString;
-    if (contactName != null &&
-        (contactNumber != null && contactNumber?.isNotEmpty == true)) {
-      contactString = '👤$contactName, 📞$contactNumber';
-    } else if (contactName != null) {
-      contactString = '👤$contactName';
-    } else if (contactNumber != null) {
-      contactString = '📞$contactNumber';
-    }
-
     final numberOfInvitees = invitees?.length.toString() ?? '?';
-
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: SizeTransition(
@@ -59,9 +57,22 @@ class EventCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        BodyMediumText(
-                          '${DateFormat('dd/MM, HH:mm').format(event.happenedAt)}, $contactString',
-                          textAlign: TextAlign.left,
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            BodyMediumText(
+                              DateFormat('dd/MM, HH:mm')
+                                  .format(event.happenedAt),
+                              textAlign: TextAlign.left,
+                            ),
+                            _ContactString(
+                              contactName: contactName,
+                              contactNumber: contactNumber,
+                              onContactNumberTap: onContactNumberTap,
+                              countryCode: countryCode,
+                            ),
+                          ],
                         ),
                         const SizedBox.square(dimension: 8),
                         Row(
@@ -97,6 +108,70 @@ class EventCard extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _ContactString extends StatelessWidget {
+  const _ContactString({
+    this.contactName,
+    this.countryCode,
+    this.contactNumber,
+    this.onContactNumberTap,
+  });
+
+  final String? contactName;
+  final String? contactNumber;
+  final String? countryCode;
+  final Function(
+    String contactName,
+    String countryCode,
+    String contactNumber,
+  )? onContactNumberTap;
+
+  @override
+  Widget build(BuildContext context) {
+    TextSpan? contactNameWidgetSpan;
+    TextSpan? contactNumberTextSpan;
+    final _countryCode = countryCode;
+    final _phoneNumber = contactNumber;
+    if (contactName != null) {
+      contactNameWidgetSpan = TextSpan(
+        text: ', $contactName',
+        style: Theme.of(context).textTheme.bodyMedium,
+      );
+    }
+    if (_phoneNumber != null &&
+        _phoneNumber.isNotEmpty &&
+        _countryCode != null) {
+      contactNumberTextSpan = TextSpan(
+        text: ', ',
+        children: [
+          TextSpan(
+            text: _phoneNumber,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.blue,
+                ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () async {
+                onContactNumberTap?.call(
+                  contactName ?? '',
+                  _countryCode,
+                  _phoneNumber,
+                );
+              },
+          ),
+        ],
+      );
+    }
+    return RichText(
+      text: TextSpan(
+        style: Theme.of(context).textTheme.bodyMedium,
+        children: [
+          if (contactNameWidgetSpan != null) contactNameWidgetSpan,
+          if (contactNumberTextSpan != null) contactNumberTextSpan,
+        ],
       ),
     );
   }

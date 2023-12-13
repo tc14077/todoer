@@ -771,6 +771,12 @@ class $InviteesTable extends Invitees with TableInfo<$InviteesTable, Invitee> {
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _countryCodeMeta =
+      const VerificationMeta('countryCode');
+  @override
+  late final GeneratedColumn<String> countryCode = GeneratedColumn<String>(
+      'country_code', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _phoneNumberMeta =
       const VerificationMeta('phoneNumber');
   @override
@@ -787,7 +793,7 @@ class $InviteesTable extends Invitees with TableInfo<$InviteesTable, Invitee> {
           'REFERENCES events (id) ON UPDATE CASCADE ON DELETE CASCADE'));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, createdAt, name, phoneNumber, event];
+      [id, createdAt, name, countryCode, phoneNumber, event];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -810,6 +816,12 @@ class $InviteesTable extends Invitees with TableInfo<$InviteesTable, Invitee> {
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('country_code')) {
+      context.handle(
+          _countryCodeMeta,
+          countryCode.isAcceptableOrUnknown(
+              data['country_code']!, _countryCodeMeta));
     }
     if (data.containsKey('phone_number')) {
       context.handle(
@@ -836,6 +848,8 @@ class $InviteesTable extends Invitees with TableInfo<$InviteesTable, Invitee> {
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      countryCode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}country_code']),
       phoneNumber: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}phone_number']),
       event: attachedDatabase.typeMapping
@@ -853,12 +867,14 @@ class Invitee extends DataClass implements Insertable<Invitee> {
   final int id;
   final DateTime createdAt;
   final String name;
+  final String? countryCode;
   final String? phoneNumber;
   final int? event;
   const Invitee(
       {required this.id,
       required this.createdAt,
       required this.name,
+      this.countryCode,
       this.phoneNumber,
       this.event});
   @override
@@ -867,6 +883,9 @@ class Invitee extends DataClass implements Insertable<Invitee> {
     map['id'] = Variable<int>(id);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['name'] = Variable<String>(name);
+    if (!nullToAbsent || countryCode != null) {
+      map['country_code'] = Variable<String>(countryCode);
+    }
     if (!nullToAbsent || phoneNumber != null) {
       map['phone_number'] = Variable<String>(phoneNumber);
     }
@@ -881,6 +900,9 @@ class Invitee extends DataClass implements Insertable<Invitee> {
       id: Value(id),
       createdAt: Value(createdAt),
       name: Value(name),
+      countryCode: countryCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(countryCode),
       phoneNumber: phoneNumber == null && nullToAbsent
           ? const Value.absent()
           : Value(phoneNumber),
@@ -896,6 +918,7 @@ class Invitee extends DataClass implements Insertable<Invitee> {
       id: serializer.fromJson<int>(json['id']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       name: serializer.fromJson<String>(json['name']),
+      countryCode: serializer.fromJson<String?>(json['countryCode']),
       phoneNumber: serializer.fromJson<String?>(json['phoneNumber']),
       event: serializer.fromJson<int?>(json['event']),
     );
@@ -907,6 +930,7 @@ class Invitee extends DataClass implements Insertable<Invitee> {
       'id': serializer.toJson<int>(id),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'name': serializer.toJson<String>(name),
+      'countryCode': serializer.toJson<String?>(countryCode),
       'phoneNumber': serializer.toJson<String?>(phoneNumber),
       'event': serializer.toJson<int?>(event),
     };
@@ -916,12 +940,14 @@ class Invitee extends DataClass implements Insertable<Invitee> {
           {int? id,
           DateTime? createdAt,
           String? name,
+          Value<String?> countryCode = const Value.absent(),
           Value<String?> phoneNumber = const Value.absent(),
           Value<int?> event = const Value.absent()}) =>
       Invitee(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         name: name ?? this.name,
+        countryCode: countryCode.present ? countryCode.value : this.countryCode,
         phoneNumber: phoneNumber.present ? phoneNumber.value : this.phoneNumber,
         event: event.present ? event.value : this.event,
       );
@@ -931,6 +957,7 @@ class Invitee extends DataClass implements Insertable<Invitee> {
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('name: $name, ')
+          ..write('countryCode: $countryCode, ')
           ..write('phoneNumber: $phoneNumber, ')
           ..write('event: $event')
           ..write(')'))
@@ -938,7 +965,8 @@ class Invitee extends DataClass implements Insertable<Invitee> {
   }
 
   @override
-  int get hashCode => Object.hash(id, createdAt, name, phoneNumber, event);
+  int get hashCode =>
+      Object.hash(id, createdAt, name, countryCode, phoneNumber, event);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -946,6 +974,7 @@ class Invitee extends DataClass implements Insertable<Invitee> {
           other.id == this.id &&
           other.createdAt == this.createdAt &&
           other.name == this.name &&
+          other.countryCode == this.countryCode &&
           other.phoneNumber == this.phoneNumber &&
           other.event == this.event);
 }
@@ -954,12 +983,14 @@ class InviteesCompanion extends UpdateCompanion<Invitee> {
   final Value<int> id;
   final Value<DateTime> createdAt;
   final Value<String> name;
+  final Value<String?> countryCode;
   final Value<String?> phoneNumber;
   final Value<int?> event;
   const InviteesCompanion({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.name = const Value.absent(),
+    this.countryCode = const Value.absent(),
     this.phoneNumber = const Value.absent(),
     this.event = const Value.absent(),
   });
@@ -967,6 +998,7 @@ class InviteesCompanion extends UpdateCompanion<Invitee> {
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     required String name,
+    this.countryCode = const Value.absent(),
     this.phoneNumber = const Value.absent(),
     this.event = const Value.absent(),
   }) : name = Value(name);
@@ -974,6 +1006,7 @@ class InviteesCompanion extends UpdateCompanion<Invitee> {
     Expression<int>? id,
     Expression<DateTime>? createdAt,
     Expression<String>? name,
+    Expression<String>? countryCode,
     Expression<String>? phoneNumber,
     Expression<int>? event,
   }) {
@@ -981,6 +1014,7 @@ class InviteesCompanion extends UpdateCompanion<Invitee> {
       if (id != null) 'id': id,
       if (createdAt != null) 'created_at': createdAt,
       if (name != null) 'name': name,
+      if (countryCode != null) 'country_code': countryCode,
       if (phoneNumber != null) 'phone_number': phoneNumber,
       if (event != null) 'event': event,
     });
@@ -990,12 +1024,14 @@ class InviteesCompanion extends UpdateCompanion<Invitee> {
       {Value<int>? id,
       Value<DateTime>? createdAt,
       Value<String>? name,
+      Value<String?>? countryCode,
       Value<String?>? phoneNumber,
       Value<int?>? event}) {
     return InviteesCompanion(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
       name: name ?? this.name,
+      countryCode: countryCode ?? this.countryCode,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       event: event ?? this.event,
     );
@@ -1013,6 +1049,9 @@ class InviteesCompanion extends UpdateCompanion<Invitee> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (countryCode.present) {
+      map['country_code'] = Variable<String>(countryCode.value);
+    }
     if (phoneNumber.present) {
       map['phone_number'] = Variable<String>(phoneNumber.value);
     }
@@ -1028,6 +1067,7 @@ class InviteesCompanion extends UpdateCompanion<Invitee> {
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('name: $name, ')
+          ..write('countryCode: $countryCode, ')
           ..write('phoneNumber: $phoneNumber, ')
           ..write('event: $event')
           ..write(')'))

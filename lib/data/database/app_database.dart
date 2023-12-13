@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:todoer/data/models/user_settings.dart';
@@ -21,7 +22,7 @@ class AppDatabase extends _$AppDatabase {
   // you should bump this number whenever you change or add a table definition.
   // Migrations are covered later in the documentation.
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   // see more details on
   // https://drift.simonbinder.eu/docs/advanced-features/migrations/
@@ -34,21 +35,35 @@ class AppDatabase extends _$AppDatabase {
       onUpgrade: (Migrator m, int from, int to) async {
         // disable foreign_keys before migrations
         await customStatement('PRAGMA foreign_keys = OFF');
-
-        if (from < 2) {
-          await m.addColumn(users, users.name);
-        }
-        if (from < 3) {
-          await m.createTable(events);
-          await m.createTable(invitees);
-        }
-        if (from < 4) {
-          await m.addColumn(users, users.createdAt);
-          await m.addColumn(userSettings, userSettings.createdAt);
-          await m.addColumn(invitees, invitees.phoneNumber);
-        }
-        if (from < 5) {
-          await m.addColumn(events, events.remark);
+        await transaction(() async {
+          if (from < 2) {
+            await m.addColumn(users, users.name);
+          }
+          if (from < 3) {
+            await m.createTable(events);
+            await m.createTable(invitees);
+          }
+          if (from < 4) {
+            await m.addColumn(users, users.createdAt);
+            await m.addColumn(userSettings, userSettings.createdAt);
+            await m.addColumn(invitees, invitees.phoneNumber);
+          }
+          if (from < 5) {
+            await m.addColumn(events, events.remark);
+          }
+          if (from < 6) {
+            await m.addColumn(invitees, invitees.countryCode);
+            await update(invitees).write(const InviteesCompanion(
+              countryCode: Value('852'),
+            ));
+          }
+        });
+        // Assert that the schema is valid after migrations
+        if (kDebugMode) {
+          final wrongForeignKeys =
+              await customSelect('PRAGMA foreign_key_check').get();
+          assert(wrongForeignKeys.isEmpty,
+              '${wrongForeignKeys.map((e) => e.data)}');
         }
       },
       beforeOpen: (details) async {

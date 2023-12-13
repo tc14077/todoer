@@ -75,7 +75,7 @@ class _DateTimePickerFieldState extends State<DateTimePickerField> {
               final date = await showDatePicker(
                 context: context,
                 initialDate: widget.pickedDate,
-                firstDate: today.subtract(const Duration(days: 1)),
+                firstDate: today.subtract(const Duration(days: 365)),
                 lastDate: today.add(const Duration(days: 365)),
                 currentDate: widget.pickedDate,
                 initialEntryMode: DatePickerEntryMode.calendarOnly,

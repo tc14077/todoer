@@ -17,6 +17,14 @@ abstract class WhatsappHelper {
 }
 
 class WhatsappHelperImpl implements WhatsappHelper {
+  static final WhatsappHelperImpl _instance = WhatsappHelperImpl._();
+
+  WhatsappHelperImpl._();
+
+  factory WhatsappHelperImpl() {
+    return _instance;
+  }
+
   static const iosUniversalLinkHost = 'https://wa.me';
   static const androidDeepLinkHost = 'whatsapp://send';
 

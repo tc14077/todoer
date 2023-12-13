@@ -49,6 +49,7 @@ class AnimatedFullEventList extends StatelessWidget {
           invitees: invitees,
           contactName: invitees?.firstOrNull?.name,
           contactNumber: invitees?.firstOrNull?.phoneNumber,
+          countryCode: invitees?.firstOrNull?.countryCode,
           onTap: () {
             onEventCardTap(event.id);
           },

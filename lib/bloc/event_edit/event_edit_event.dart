@@ -38,12 +38,22 @@ final class InviteeDataUpdateRequested extends EventEditEvent {
   final String hashId;
   final String? name;
   final String? phoneNumber;
+  final String? countryCode;
 
-  const InviteeDataUpdateRequested(
-      {required this.hashId, this.name, this.phoneNumber});
+  const InviteeDataUpdateRequested({
+    required this.hashId,
+    this.name,
+    this.countryCode,
+    this.phoneNumber,
+  });
 
   @override
-  List<Object?> get props => [hashId, name, phoneNumber];
+  List<Object?> get props => [
+        hashId,
+        name,
+        countryCode,
+        phoneNumber,
+      ];
 }
 
 final class EventEditRequested extends EventEditEvent {

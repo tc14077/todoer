@@ -31,10 +31,16 @@ class CreateBookingWidget extends BookingDetailWidget {
 
   @override
   void onInviteeInfoChanged(
-      BuildContext context, String hashId, String name, String phoneNumber) {
+    BuildContext context,
+    String hashId,
+    String name,
+    String countryCode,
+    String phoneNumber,
+  ) {
     context.read<EventCreateBloc>().add(InviteeDataUpdateRequested(
           hashId: hashId,
           name: name,
+          countryCode: countryCode,
           phoneNumber: phoneNumber,
         ));
   }

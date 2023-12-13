@@ -33,6 +33,7 @@ abstract class BookingFormInterface {
     BuildContext context,
     String hashId,
     String name,
+    String countryCode,
     String phoneNumber,
   );
 }
@@ -88,10 +89,16 @@ class _BookingDetailWidgetState extends State<BookingDetailWidget> {
           key: ValueKey(pair.hashId),
           inviteeName: pair.record.inviteeName ?? '',
           inviteePhoneNumber: pair.record.inviteePhoneNumber ?? '',
+          inviteeCountryCode: pair.record.inviteeCountryCode,
           eventFormError: widget.inviteeFormErrors?[pair.hashId],
-          onInviteeInfoUpdate: (name, phoneNumber) {
+          onInviteeInfoUpdate: (name, countryCode, phoneNumber) {
             widget.onInviteeInfoChanged(
-                context, pair.hashId, name, phoneNumber);
+              context,
+              pair.hashId,
+              name,
+              countryCode,
+              phoneNumber,
+            );
           },
         ));
     return Column(

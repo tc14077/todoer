@@ -48,7 +48,7 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState>
     selectedDate = now;
     selectedTime = TimeOfDay.fromDateTime(now);
     final initialInviteeUUID = const Uuid().v4();
-    inviteeFormRecordMap[initialInviteeUUID] = const InviteeFormRecord();
+    inviteeFormRecordMap[initialInviteeUUID] = const InviteeFormRecord(inviteeCountryCode: '852');
     emit(EventDataUpdateSuccess(
       name: name,
       remark: remark,
@@ -80,7 +80,10 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState>
     Emitter<EventCreateState> emit,
   ) {
     final newRecord = inviteeFormRecordMap[event.hashId]?.copyWith(
-        inviteeName: event.name, inviteePhoneNumber: event.phoneNumber);
+      inviteeName: event.name,
+      inviteeCountryCode: event.countryCode,
+      inviteePhoneNumber: event.phoneNumber,
+    );
     if (newRecord != null) inviteeFormRecordMap[event.hashId] = newRecord;
     //TODO fix hashId not found case
     emit(EventDataUpdateSuccess(
@@ -132,6 +135,9 @@ class EventCreateBloc extends Bloc<EventCreateEvent, EventCreateState>
     final inviteeId = await inviteeRepository.createItem(InviteesCompanion(
       name: Value(inviteeFormRecordMap.entries.first.value.inviteeName ?? ''),
       event: Value(itemId),
+      countryCode: Value(
+        inviteeFormRecordMap.entries.first.value.inviteeCountryCode,
+      ),
       phoneNumber: Value(
         inviteeFormRecordMap.entries.first.value.inviteePhoneNumber,
       ),

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todoer/data/display_items/displayable.dart';
+import 'package:todoer/main.dart';
+import 'package:todoer/services/prefill_text_helper.dart';
+import 'package:todoer/services/whatsapp_helper.dart';
 import 'package:todoer/ui/system/themed_text.dart';
 
+import 'contact_with_whatsapp_dialog.dart';
 import 'event_card.dart';
 import 'model/list_model.dart';
 
@@ -45,8 +49,40 @@ class AnimatedFullEventList extends StatelessWidget {
           invitees: invitees,
           contactName: invitees?.firstOrNull?.name,
           contactNumber: invitees?.firstOrNull?.phoneNumber,
+          countryCode: invitees?.firstOrNull?.countryCode,
           onTap: () {
             onEventCardTap(event.id);
+          },
+          onContactNumberTap: (contactName, countryCode, contactNumber) async {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return ContactWithWhatsAppDialog(
+                  contactName: invitees?.firstOrNull?.name ?? '',
+                  onContactWithWhatsAppTap: () async {
+                    await getIt<WhatsappHelperImpl>().launchWhatsapp(
+                      countryCode: countryCode,
+                      phoneNumber: contactNumber,
+                    );
+                  },
+                  onContactWithConfirmationMessageWithWhatsAppTap: () async {
+                    await getIt<WhatsappHelperImpl>().launchWhatsapp(
+                      countryCode: countryCode,
+                      phoneNumber: contactNumber,
+                      prefillText: getIt<PrefillTextHelperImpl>()
+                          .getBookingConfirmationMessage(
+                        event: event,
+                        contactName: contactName,
+                        invitees: invitees,
+                      ),
+                    );
+                  },
+                  onCancelTap: () {
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
+            );
           },
           onDeleteButtonTap: (eventId) {
             showDialog(

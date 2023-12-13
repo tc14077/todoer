@@ -50,6 +50,8 @@ dependencies:
   equatable: ^2.0.5
   collection: ^1.17.1
   uuid: ^4.2.1
+  url_launcher: ^6.1.14
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -78,7 +80,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - google_fonts/ #can download the fonts from https://fonts.google.com/, and avoid download texttheme during runtime
-
+    - assets/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

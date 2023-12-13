@@ -29,6 +29,7 @@ class WhatsappHelperImpl implements WhatsappHelper {
     final whatsappUri = getWhatsappUri(
       countryCode: countryCode,
       phoneNumber: phoneNumber,
+      prefillText: prefillText,
     );
     if (await canLaunchUrl(whatsappUri)) {
       return await launchUrl(whatsappUri);
@@ -52,14 +53,14 @@ class WhatsappHelperImpl implements WhatsappHelper {
     if (Platform.isAndroid) {
       final prefillTextQuery = prefillText != null ? '&text=$prefillText' : '';
       return Uri.parse(
-        '$WhatsappHelperImpl.androidDeepLinkHost?phone=$normalizedCountryCode$normalizedPhoneNumber$prefillTextQuery',
+        '${WhatsappHelperImpl.androidDeepLinkHost}?phone=$normalizedCountryCode$normalizedPhoneNumber$prefillTextQuery',
       );
     } else if (Platform.isIOS) {
       final prefillTextQuery = prefillText != null
           ? '&text=${Uri.encodeQueryComponent(prefillText)}'
           : '';
       return Uri.parse(
-        '$WhatsappHelperImpl.iosUniversalLinkHost/$normalizedCountryCode$normalizedPhoneNumber$prefillTextQuery',
+        '${WhatsappHelperImpl.iosUniversalLinkHost}/$normalizedCountryCode$normalizedPhoneNumber$prefillTextQuery',
       );
     } else {
       throw Exception('Unsupported platform');

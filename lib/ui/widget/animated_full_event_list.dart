@@ -108,24 +108,38 @@ class AnimatedFullEventList extends StatelessWidget {
                     ),
                   ),
                   actions: [
-                    TextButton.icon(
-                      onPressed: () {
-                        onDeleteEventRequested(eventId);
-                        Navigator.pop(context);
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.redAccent.shade100,
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          onDeleteEventRequested(eventId);
+                          Navigator.pop(context);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: Colors.redAccent.shade100,
+                          ),
+                        ),
+                        child: LabelMediumText(
+                          'Delete',
+                          textColor: Colors.redAccent.shade100,
+                        ),
                       ),
-                      icon: const Icon(Icons.delete),
-                      label: const LabelMediumText('Delete'),
                     ),
-                    TextButton.icon(
-                      onPressed: () => Navigator.pop(context),
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.blueGrey.shade100,
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                            color: Colors.blueGrey,
+                          ),
+                        ),
+                        child: const LabelMediumText(
+                          'Cancel',
+                          textColor: Colors.blueGrey,
+                        ),
                       ),
-                      icon: const Icon(Icons.arrow_back),
-                      label: const LabelMediumText('Cancel'),
                     ),
                   ],
                 );

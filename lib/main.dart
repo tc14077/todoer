@@ -11,6 +11,7 @@ import 'package:todoer/enum/app_theme_options.dart';
 import 'package:todoer/navigation/beamer/main_router.dart';
 import 'package:todoer/repositories/event_repository.dart';
 import 'package:todoer/repositories/invitee_repository.dart';
+import 'package:todoer/services/prefill_text_helper.dart';
 import 'package:todoer/services/whatsapp_helper.dart';
 import 'package:todoer/ui/system/themes.dart';
 
@@ -25,6 +26,7 @@ void main() {
   getIt.registerSingleton(EventRepository(EventsDao(database)));
   getIt.registerSingleton(InviteeRepository(InviteeDao(database)));
   getIt.registerSingleton(WhatsappHelperImpl());
+  getIt.registerSingleton(PrefillTextHelperImpl());
 
   runApp(const MyApp());
 }

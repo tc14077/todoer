@@ -50,6 +50,8 @@ class EventCard extends StatelessWidget {
           child: Container(
             constraints: const BoxConstraints(minHeight: 80),
             child: Card(
+              // based on requirement
+              margin: EdgeInsets.zero,
               child: Stack(
                 children: [
                   Padding(
@@ -78,18 +80,18 @@ class EventCard extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                BodyMediumText(event.name),
-                                if (event.remark != null)
-                                  BodyMediumText('${event.remark}'),
-                                // if (contactString != null)
-                                //   BodyMediumText(contactString),
-                              ],
+                            BodyMediumText(
+                              event.name,
+                              fontWeight: FontWeight.bold,
                             ),
-                            // FIXME: remove this spacer
-                            const Spacer(),
+                            // based on requirement
+                            if (event.remark != null)
+                              Expanded(
+                                child: BodyMediumText(
+                                  ' - ${event.remark}',
+                                  maxLines: 1,
+                                ),
+                              ),
                           ],
                         ),
                       ],

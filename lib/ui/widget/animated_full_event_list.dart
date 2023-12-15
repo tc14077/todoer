@@ -147,8 +147,10 @@ class AnimatedFullEventList extends StatelessWidget {
             );
           },
         ),
-      DateDisplayItem(dateTime: var dateTime) =>
-        TitleMediumText(DateFormat('dd/MM/yyyy').format(dateTime))
+      // Hiding DateTime separator here because of requirement
+      // DateDisplayItem(dateTime: var dateTime) =>
+      //   TitleMediumText(DateFormat('dd/MM/yyyy').format(dateTime)),
+      _ => SizedBox.shrink()
     };
   }
 

@@ -309,6 +309,7 @@ class BodyMediumText extends StatelessWidget {
   final TextAlign? textAlign;
   final FontWeight? fontWeight;
   final Color? textColor;
+  final int? maxLines;
 
   const BodyMediumText(
     this.data, {
@@ -317,6 +318,7 @@ class BodyMediumText extends StatelessWidget {
     this.textAlign,
     this.fontWeight,
     this.textColor,
+    this.maxLines,
   }) : super(key: key);
 
   @override
@@ -329,6 +331,8 @@ class BodyMediumText extends StatelessWidget {
                 color: textColor,
               ),
       textAlign: textAlign ?? TextAlign.start,
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

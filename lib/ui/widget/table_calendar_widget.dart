@@ -1,8 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:todoer/ui/system/themed_text.dart';
 
 import '../../data/display_items/displayable.dart';
 
@@ -63,22 +61,23 @@ class TableCalendarWidgetState extends State<TableCalendarWidget> {
         calendarFormat: calendarFormat,
         headerVisible: true,
         eventLoader: eventLoader,
-        calendarBuilders:
-            CalendarBuilders(markerBuilder: (context, day, eventDisplayItems) {
-          final eventLength = eventDisplayItems.length;
-          if (eventLength == 0) {
-            return null;
-          }
-          return Positioned(
-            right: 0,
-            bottom: 0,
-            child: LabelSmallText(
-              eventDisplayItems.length.toString(),
-              fontWeight: FontWeight.bold,
-              textColor: Theme.of(context).colorScheme.secondary,
-            ),
-          );
-        }),
+        // based on requirement
+        // calendarBuilders:
+        //     CalendarBuilders(markerBuilder: (context, day, eventDisplayItems) {
+        //   final eventLength = eventDisplayItems.length;
+        //   if (eventLength == 0) {
+        //     return null;
+        //   }
+        //   return Positioned(
+        //     right: 0,
+        //     bottom: 0,
+        //     child: LabelSmallText(
+        //       eventDisplayItems.length.toString(),
+        //       fontWeight: FontWeight.bold,
+        //       textColor: Theme.of(context).colorScheme.secondary,
+        //     ),
+        //   );
+        // }),
         selectedDayPredicate: (day) {
           // Use `selectedDayPredicate` to determine which day is currently selected.
           // If this returns true, then `day` will be marked as selected.

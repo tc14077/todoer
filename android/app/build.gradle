@@ -42,9 +42,9 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.todoer"
-        minSdkVersion flutter.minSdkVersion
+        applicationId "com.plannable_notebook.booking"
+        namespace "com.plannable_notebook.booking"
+        minSdkVersion 20
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

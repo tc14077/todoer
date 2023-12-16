@@ -1,4 +1,4 @@
-package com.example.todoer
+package com.plannable_notebook.booking
 
 import io.flutter.embedding.android.FlutterActivity
 
